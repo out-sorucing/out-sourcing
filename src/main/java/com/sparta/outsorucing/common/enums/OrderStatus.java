@@ -1,4 +1,4 @@
-package com.sparta.outsorucing;
+package com.sparta.outsorucing.common.enums;
 
 public enum OrderStatus {
     ORDERED("ORDERED"),

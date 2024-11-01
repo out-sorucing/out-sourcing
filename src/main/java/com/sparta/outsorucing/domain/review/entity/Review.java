@@ -1,9 +1,9 @@
-package com.sparta.outsorucing;
+package com.sparta.outsorucing.domain.review.entity;
 
+import com.sparta.outsorucing.common.AuditingDate;
+import com.sparta.outsorucing.domain.order.entity.Order;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Table(name="review")
 @NoArgsConstructor
-public class Review extends AuditingDate{
+public class Review extends AuditingDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

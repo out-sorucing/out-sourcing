@@ -1,4 +1,4 @@
-package com.sparta.outsorucing;
+package com.sparta.outsorucing.common;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

@@ -1,5 +1,10 @@
-package com.sparta.outsorucing;
+package com.sparta.outsorucing.domain.order.entity;
 
+import com.sparta.outsorucing.domain.menu.entity.Menu;
+import com.sparta.outsorucing.common.enums.OrderStatus;
+import com.sparta.outsorucing.domain.store.entity.Store;
+import com.sparta.outsorucing.common.AuditingDate;
+import com.sparta.outsorucing.domain.member.entity.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,41 +18,40 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="store")
+@Table(name="order")
 @NoArgsConstructor
-public class Store {
+public class Order extends AuditingDate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Comment(value = "가게 고유번호")
+    @Comment(value = "주문 고유번호")
     private Long id;
 
     @Column
-    @Comment(value = "가게명")
-    private String storeName;
-
-    @Column
-    private String openTime;
-
-    @Column
-    private String closeTime;
-
-    @Column
-    private int minPrice;
+    private String orderAt;
 
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "menu_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Menu menu;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Store store;
 }
