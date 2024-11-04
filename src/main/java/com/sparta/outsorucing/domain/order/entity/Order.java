@@ -1,7 +1,7 @@
 package com.sparta.outsorucing.domain.order.entity;
 
-import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.common.enums.OrderStatus;
+import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import com.sparta.outsorucing.common.AuditingDate;
 import com.sparta.outsorucing.domain.member.entity.Member;
@@ -56,4 +56,9 @@ public class Order extends AuditingDate {
     @JoinColumn(name = "store_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
+
+
+    public void update(OrderStatus changeOrderStatusDto) {
+        this.status=changeOrderStatusDto;
+    }
 }

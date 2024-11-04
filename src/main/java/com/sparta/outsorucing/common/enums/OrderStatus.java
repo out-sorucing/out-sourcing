@@ -1,5 +1,7 @@
 package com.sparta.outsorucing.common.enums;
 
+
+
 public enum OrderStatus {
     ORDERED("ORDERED"),
     COOKING("COOKING"),

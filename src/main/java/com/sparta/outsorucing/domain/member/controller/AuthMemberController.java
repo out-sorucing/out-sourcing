@@ -23,10 +23,15 @@ public class AuthMemberController {
                 .body(memberService.signUp(signupRequestDto));
     }
 
+//    @PostMapping("/login")
+//    public ResponseEntity<MemberResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(memberService.login(loginRequestDto));
+//    }
+
     @PostMapping("/login")
-    public ResponseEntity<MemberResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(memberService.login(loginRequestDto));
+    public String login(@RequestBody LoginRequestDto loginRequestDto) {
+        return memberService.login1(loginRequestDto);
     }
 }

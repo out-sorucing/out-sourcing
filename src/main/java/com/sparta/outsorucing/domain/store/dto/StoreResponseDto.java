@@ -16,7 +16,7 @@ public class StoreResponseDto {
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
-        this.memberId = store.getMemberId();
+        this.memberId = store.getMember().getId();
         this.storeName = store.getStoreName();
         this.status = store.getStatus().toString();
         this.openTime = store.getOpenTime();

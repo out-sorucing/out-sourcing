@@ -6,6 +6,7 @@ import com.sparta.outsorucing.domain.member.entity.Member;
 
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
+import com.sparta.outsorucing.domain.order.dto.ChangeOrderStatusDto;
 import com.sparta.outsorucing.domain.order.entity.Order;
 import com.sparta.outsorucing.domain.order.repository.OrderRepository;
 import com.sparta.outsorucing.domain.store.entity.Store;
@@ -16,6 +17,7 @@ import java.util.Date;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -52,4 +54,20 @@ public class OrderService {
         return "주문이 완료되었습니다.";
     }
 
+    @Transactional
+    public String changeOrderStatus(Member member, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
+
+        if(member.getRole().equals("USER")){
+            throw new IllegalStateException("권한이 없습니다.");
+        }
+        Order order = orderRepository.findById(ordersId)
+            .orElseThrow(()-> new IllegalStateException("Order not found"));
+
+        if(order.getStatus().equals(changeOrderStatusDto)){
+            throw new IllegalStateException("이미"+changeOrderStatusDto+"상태 입니다");
+        }
+        order.update(changeOrderStatusDto.getOrderStatus());
+
+        return changeOrderStatusDto+"로 변경되었습니다";
+    }
 }
