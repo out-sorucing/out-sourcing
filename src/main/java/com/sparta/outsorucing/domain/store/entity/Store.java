@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.store.entity;
 
+import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
@@ -14,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -22,7 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="store")
+@Table(name="out_store")
 @NoArgsConstructor
 public class Store {
 
@@ -53,12 +55,13 @@ public class Store {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    public Store(StoreRequestDto requestDto, Status status) {
+    public Store(StoreRequestDto requestDto, Status status, Member member) {
         this.storeName = requestDto.getStoreName();
         this.openTime = requestDto.getOpenTime();
         this.closeTime = requestDto.getCloseTime();
         this.minPrice = requestDto.getMinPrice();
         this.status = status;
+        this.member = member;
     }
 
     public void update(StoreRequestDto requestDto){
