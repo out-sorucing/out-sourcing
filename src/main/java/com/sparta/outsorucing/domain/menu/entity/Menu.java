@@ -59,4 +59,21 @@ public class Menu {
         this.status = status;
         this.store = store;
     }
+
+    public void updateMenu(
+        String menuName,
+        int price,
+        String content) {
+        this.menuName = menuName;
+        this.price = price;
+        this.content = content;
+    }
+
+    public void updateStatus() {
+        this.status = Status.DELETE;
+    }
+
+    public boolean checkedStatus(){
+        return this.status == Status.DELETE;
+    }
 }

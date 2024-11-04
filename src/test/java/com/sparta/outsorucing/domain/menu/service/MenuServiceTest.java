@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.sparta.outsorucing.common.enums.Status;
+import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
@@ -34,7 +35,7 @@ class MenuServiceTest {
     private MenuService menuService;
 
     @Test
-    @DisplayName("메뉴 추가 성공 테스트")
+    @DisplayName("메뉴 생성 - 메뉴 추가 성공 테스트")
     void test(){
         //given
         Store store = new Store();
@@ -55,28 +56,28 @@ class MenuServiceTest {
         when(menuRepository.save(any())).thenReturn(menu);
 
         //when
-        CreateMenuResponseDto create = menuService.createMenu(1L, createMenuRequestDto, member);
+        CreateMenuResponseDto create = menuService.createMenu(1L, createMenuRequestDto, member.getId());
         //then
         assertEquals(create.getMenuName(), "createMenuRequest");
         verify(menuRepository,times(1)).save(any());
     }
 
     @Test
-    @DisplayName("존재하지 않는 가게일 시 예외처리")
+    @DisplayName("메뉴 생성 - 존재하지 않는 가게일 시 예외처리")
     void test1(){
         //given
         Member member = new Member();
         CreateMenuRequestDto createMenuRequestDto = new CreateMenuRequestDto();
 
         //when
-        IllegalArgumentException ex  = assertThrows(IllegalArgumentException.class, ()->menuService.createMenu(1L, createMenuRequestDto, member));
+        InvalidRequestException ex  = assertThrows(InvalidRequestException.class, ()->menuService.createMenu(1L, createMenuRequestDto, member.getId()));
         //then
         assertEquals(ex.getMessage(),"존재하지 않는 가게입니다.");
         verify(menuRepository,times(0)).save(any());
     }
 
     @Test
-    @DisplayName("본인의 가게가 아닐 시 예외처리")
+    @DisplayName("메뉴 생성 - 본인의 가게가 아닐 시 예외처리")
     void test2(){
         //given
         Store store = new Store();
@@ -90,9 +91,30 @@ class MenuServiceTest {
         when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
 
         //when
-        IllegalArgumentException ex  = assertThrows(IllegalArgumentException.class, ()->menuService.createMenu(1L, createMenuRequestDto, member));
+        InvalidRequestException ex  = assertThrows(InvalidRequestException.class, ()->menuService.createMenu(1L, createMenuRequestDto, member.getId()));
         //then
         assertEquals(ex.getMessage(),"본인 가게가 아닙니다.");
         verify(menuRepository,times(0)).save(any());
     }
+
+//    @Test
+//    @DisplayName("메뉴 수정 - 본인의 가게가 아닐 시 예외처리")
+//    void test3(){
+//        //given
+//        Store store = new Store();
+//        Member member = new Member();
+//        Member member1 = new Member();
+//        CreateMenuRequestDto createMenuRequestDto = new CreateMenuRequestDto();
+//        ReflectionTestUtils.setField(store, "id", 2L);
+//        ReflectionTestUtils.setField(store, "member", member1);
+//        ReflectionTestUtils.setField(member, "id", 2L);
+//
+//        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+//
+//        //when
+//        InvalidRequestException ex  = assertThrows(InvalidRequestException.class, ()->menuService.UpdateMenu(1L, 1l, createMenuRequestDto, member.getId()));
+//        //then
+//        assertEquals(ex.getMessage(),"본인 가게가 아닙니다.");
+//        verify(menuRepository,times(0)).save(any());
+//    }
 }

@@ -5,6 +5,7 @@ import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
 import com.sparta.outsorucing.domain.store.dto.StoreResponseDto;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import com.sparta.outsorucing.domain.store.repository.StoreRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,14 @@ public class StoreService {
     public StoreResponseDto createStore(StoreRequestDto requestDto) {
         Store savedStore = storeRepository.save(new Store(requestDto, Status.ACTIVE));
         return new StoreResponseDto(savedStore);
+    }
+
+    public List<StoreResponseDto> findStore(){
+        return storeRepository.findAll().stream().map(StoreResponseDto::new).toList();
+    }
+
+    public List<StoreResponseDto> findStoreByName(String keyword){
+        return storeRepository.findAllByStoreNameContainsOrderByIdDesc(keyword).stream().map(StoreResponseDto::new).toList();
     }
 
 }

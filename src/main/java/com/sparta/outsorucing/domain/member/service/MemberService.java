@@ -42,30 +42,17 @@ public class MemberService {
         return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), memberRole);
     }
 
-//    public MemberResponseDto login(LoginRequestDto loginRequestDto) {
-//        Member member = memberRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
-//                ()-> new InvalidRequestException("이메일 또는 비밀번호가 잘못되었습니다."));
-//
-//        if(!passwordEncoder.matches(loginRequestDto.getPassword(), member.getPassword())) {
-//            throw new AuthException("이메일 또는 비밀번호가 잘못되었습니다.");
-//        }
-//
-//        jwtUtil.createToken(member.getId(), member.getEmail(), member.getNickName(), member.getRole());
-//
-//        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), member.getRole());
-//    }
-
-    public String login1(LoginRequestDto loginRequestDto) {
+    public MemberResponseDto login(LoginRequestDto loginRequestDto) {
         Member member = memberRepository.findByEmail(loginRequestDto.getEmail()).orElseThrow(
-            ()-> new InvalidRequestException("이메일 또는 비밀번호가 잘못되었습니다."));
+                ()-> new InvalidRequestException("이메일 또는 비밀번호가 잘못되었습니다."));
 
         if(!passwordEncoder.matches(loginRequestDto.getPassword(), member.getPassword())) {
             throw new AuthException("이메일 또는 비밀번호가 잘못되었습니다.");
         }
 
-        String token =jwtUtil.createToken(member.getId(), member.getNickName(), member.getEmail(), member.getRole());
-        System.out.println(token);
-        return token;
+        jwtUtil.createToken(member.getId(), member.getEmail(), member.getNickName(), member.getRole());
 
+        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), member.getRole());
     }
+
 }

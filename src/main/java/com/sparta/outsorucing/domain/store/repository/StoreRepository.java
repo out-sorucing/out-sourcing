@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
-
+    //  가게 검색
+    List<Store> findAllByStoreNameContainsOrderByIdDesc(String storeName);
 }
