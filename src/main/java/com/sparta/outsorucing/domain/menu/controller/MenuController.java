@@ -32,9 +32,8 @@ public class MenuController {
         @PathVariable Long storeId,
         @Valid @RequestBody CreateMenuRequestDto createMenuRequestDto,
         @Auth AuthMember authMember) {
-        return ResponseEntity.ok().body(menuService.createMenu(storeId,
+        return ResponseEntity.status(HttpStatus.CREATED).body(menuService.createMenu(storeId,
                                                                createMenuRequestDto,
-                                                               authMember.getId()));
                                                                authMember.getId()));
     }
 
@@ -55,7 +54,7 @@ public class MenuController {
         @PathVariable("menuId") Long menuId,
         @Valid @RequestBody UpdateMenuRequestDto updateMenuRequestDto,
         @Auth AuthMember authMember) {
-        return ResponseEntity.ok().body(menuService.UpdateMenu(storeId,
+        return ResponseEntity.status(HttpStatus.OK).body(menuService.UpdateMenu(storeId,
                                                                menuId,
                                                                updateMenuRequestDto,
                                                                authMember.getId()));
