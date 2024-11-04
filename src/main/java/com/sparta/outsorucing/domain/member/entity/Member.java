@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.member.entity;
 
+import com.sparta.outsorucing.common.config.PasswordEncoder;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.enums.MemberRole;
 import jakarta.persistence.Column;
@@ -16,7 +17,7 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name="user")
+@Table(name="member")
 @NoArgsConstructor
 public class Member {
 
@@ -44,4 +45,12 @@ public class Member {
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
+
+    public void createMember(String nickName, String email, String password, MemberRole memberRole, Status status) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = PasswordEncoder.encode(password);
+        this.role = memberRole;
+        this.status = status;
+    }
 }
