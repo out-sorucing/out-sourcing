@@ -55,4 +55,21 @@ public class MenuService {
         menu.updateMenu(updateMenuRequestDto.getMenuName(), updateMenuRequestDto.getPrice(), updateMenuRequestDto.getContent());
         return new CreateMenuResponseDto(menu);
     }
+
+    @Transactional
+    public String deleteMenu(
+        Long storeId,
+        Long menuId,
+        Long memberId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
+        Menu menu = menuRepository.findByMenuIdAndStoreId(menuId, storeId);
+        if (!memberId.equals(store.getMember().getId())) {
+            throw new InvalidRequestException("본인 가게가 아닙니다.");
+        }
+        if (menu.checkedStatus()) {
+            throw new InvalidRequestException("이미 삭제된 메뉴입니다.");
+        }
+        menu.updateStatus();
+        return menu.getMenuName();
+    }
 }

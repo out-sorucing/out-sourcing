@@ -13,8 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,5 +67,13 @@ public class Menu {
         this.menuName = menuName;
         this.price = price;
         this.content = content;
+    }
+
+    public void updateStatus() {
+        this.status = Status.DELETE;
+    }
+
+    public boolean checkedStatus(){
+        return this.status == Status.DELETE;
     }
 }
