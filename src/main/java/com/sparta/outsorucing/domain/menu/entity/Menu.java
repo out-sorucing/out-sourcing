@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,5 +60,14 @@ public class Menu {
         this.content = content;
         this.status = status;
         this.store = store;
+    }
+
+    public void updateMenu(
+        String menuName,
+        int price,
+        String content) {
+        this.menuName = menuName;
+        this.price = price;
+        this.content = content;
     }
 }
