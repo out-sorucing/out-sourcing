@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.sparta.outsorucing.common.enums.MemberRole;
 
 import java.io.IOException;
 
@@ -29,7 +28,6 @@ public class JwtFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        //request = new RequestWrapper(httpRequest);
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String url = httpRequest.getRequestURI();
@@ -55,21 +53,10 @@ public class JwtFilter implements Filter {
                 return;
             }
 
-//            MemberRole memberRole = MemberRole.valueOf(claims.get("memberRole", String.class));
-
             httpRequest.setAttribute("memberId", Long.parseLong(claims.getSubject()));
             httpRequest.setAttribute("nickName", claims.get("nickName"));
             httpRequest.setAttribute("email", claims.get("email"));
             httpRequest.setAttribute("memberRole", claims.get("memberRole"));
-
-//            if (url.startsWith("/owner")) { // 이 부분 수정
-//                if (!memberRole.OWNER.equals(memberRole)) {
-//                    httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "사장님만 이용할 수 있는 페이지입니다.");
-//                    return;
-//                }
-//                chain.doFilter(request, response);
-//                return;
-//            }
 
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {

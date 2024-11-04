@@ -54,6 +54,18 @@ public class Store {
     private Member member;
 
     public Store(StoreRequestDto requestDto, Status status) {
-
+        this.storeName = requestDto.getStoreName();
+        this.openTime = requestDto.getOpenTime();
+        this.closeTime = requestDto.getCloseTime();
+        this.minPrice = requestDto.getMinPrice();
+        this.status = status;
     }
+
+    public void update(StoreRequestDto requestDto){
+        this.storeName = requestDto.getStoreName();
+        this.openTime = requestDto.getOpenTime();
+        this.closeTime = requestDto.getCloseTime();
+    }
+
+
 }
