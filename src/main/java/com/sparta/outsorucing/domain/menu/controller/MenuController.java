@@ -3,7 +3,7 @@ package com.sparta.outsorucing.domain.menu.controller;
 import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
-import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
+import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
 import com.sparta.outsorucing.domain.menu.dto.UpdateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.service.MenuService;
 import jakarta.validation.Valid;
@@ -26,15 +26,25 @@ public class MenuController {
     private final MenuService menuService;
 
     @PostMapping("/{storeId}/menus")
-    public ResponseEntity<CreateMenuResponseDto> createMenu(
+    public ResponseEntity<MenuResponseDto> createMenu(
         @PathVariable Long storeId,
         @Valid @RequestBody CreateMenuRequestDto createMenuRequestDto,
         @Auth AuthMember authMember) {
         return ResponseEntity.status(HttpStatus.CREATED).body(menuService.createMenu(storeId,
                                                                createMenuRequestDto,
                                                                authMember.getId()));
+    }
 
-
+    @PutMapping("/{storeId}/menus/{menuId}")
+    public ResponseEntity<MenuResponseDto> updateMenu(
+        @PathVariable("storeId") Long storeId,
+        @PathVariable("menuId") Long menuId,
+        @Valid @RequestBody UpdateMenuRequestDto updateMenuRequestDto,
+        @Auth AuthMember authMember) {
+        return ResponseEntity.status(HttpStatus.OK).body(menuService.UpdateMenu(storeId,
+                                                               menuId,
+                                                               updateMenuRequestDto,
+                                                               authMember.getId()));
     }
 
     @DeleteMapping("/{storeId}/menus/{menuId}")
@@ -47,18 +57,5 @@ public class MenuController {
                                                  authMember.getId());
         return ResponseEntity.status(HttpStatus.OK).body(menuName + "이(가) 메뉴에서 삭제되었습니다.");
     }
-
-    @PutMapping("/{storeId}/menus/{menuId}")
-    public ResponseEntity<CreateMenuResponseDto> updateMenu(
-        @PathVariable("storeId") Long storeId,
-        @PathVariable("menuId") Long menuId,
-        @Valid @RequestBody UpdateMenuRequestDto updateMenuRequestDto,
-        @Auth AuthMember authMember) {
-        return ResponseEntity.status(HttpStatus.OK).body(menuService.UpdateMenu(storeId,
-                                                               menuId,
-                                                               updateMenuRequestDto,
-                                                               authMember.getId()));
-    }
-
 }
 

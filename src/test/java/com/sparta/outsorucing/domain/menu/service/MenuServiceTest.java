@@ -10,7 +10,7 @@ import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
-import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
+import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
 import com.sparta.outsorucing.domain.store.entity.Store;
@@ -56,7 +56,7 @@ class MenuServiceTest {
         when(menuRepository.save(any())).thenReturn(menu);
 
         //when
-        CreateMenuResponseDto create = menuService.createMenu(1L, createMenuRequestDto, member.getId());
+        MenuResponseDto create = menuService.createMenu(1L, createMenuRequestDto, member.getId());
         //then
         assertEquals(create.getMenuName(), "createMenuRequest");
         verify(menuRepository,times(1)).save(any());

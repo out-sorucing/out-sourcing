@@ -3,7 +3,7 @@ package com.sparta.outsorucing.domain.menu.service;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
-import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
+import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
 import com.sparta.outsorucing.domain.menu.dto.UpdateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
@@ -20,7 +20,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public CreateMenuResponseDto createMenu(
+    public MenuResponseDto createMenu(
         Long storeId,
         CreateMenuRequestDto createMenuRequestDto,
         Long memberId) {
@@ -33,11 +33,11 @@ public class MenuService {
             .status(Status.ACTIVE)
             .store(store)
             .build();
-        return new CreateMenuResponseDto(menuRepository.save(menu));
+        return new MenuResponseDto(menuRepository.save(menu));
     }
 
     @Transactional
-    public CreateMenuResponseDto UpdateMenu(
+    public MenuResponseDto UpdateMenu(
         Long storeId,
         Long menuId,
         UpdateMenuRequestDto updateMenuRequestDto,
@@ -48,7 +48,7 @@ public class MenuService {
             throw new InvalidRequestException("삭제된 메뉴입니다.");
         }
         menu.updateMenu(updateMenuRequestDto.getMenuName(), updateMenuRequestDto.getPrice(), updateMenuRequestDto.getContent());
-        return new CreateMenuResponseDto(menu);
+        return new MenuResponseDto(menu);
     }
 
     @Transactional
