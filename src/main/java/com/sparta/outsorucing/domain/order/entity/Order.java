@@ -16,6 +16,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -24,7 +26,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
+@Builder
 @Table(name="orders")
+@AllArgsConstructor
 @NoArgsConstructor
 public class Order extends AuditingDate {
 
@@ -38,7 +42,7 @@ public class Order extends AuditingDate {
     private OrderStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
