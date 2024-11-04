@@ -1,7 +1,9 @@
 package com.sparta.outsorucing.common.dto;
 
 import com.sparta.outsorucing.common.enums.MemberRole;
+import lombok.Getter;
 
+@Getter
 public class AuthMember {
 
     private final Long id;
