@@ -49,8 +49,4 @@ public class StoreController {
     public Long updateStore(@PathVariable Long id, @RequestBody @Valid StoreRequestDto requestDto) {
         return storeService.updateStore(id,requestDto);
     }
-
-
-
-
 }

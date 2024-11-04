@@ -44,8 +44,4 @@ public class StoreService {
             new IllegalArgumentException("비정상적인 접근")
         );
     }
-
-
-
-
 }
