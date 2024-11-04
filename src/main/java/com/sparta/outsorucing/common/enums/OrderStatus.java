@@ -3,6 +3,7 @@ package com.sparta.outsorucing.common.enums;
 
 
 public enum OrderStatus {
+    CANCELED("CANCELED"),
     ORDERED("ORDERED"),
     COOKING("COOKING"),
     DELIVERING("DELIVERING"),
