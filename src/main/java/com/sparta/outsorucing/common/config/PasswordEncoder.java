@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class PasswordEncoder {
 
-    public static String encode(String rawPassword) {
+    public String encode(String rawPassword) {
         return BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, rawPassword.toCharArray());
     }
 
