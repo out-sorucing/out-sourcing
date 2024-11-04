@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.store.dto;
 
+import com.sparta.outsorucing.domain.member.dto.MemberResponseDto;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import java.sql.Time;
 import lombok.Getter;
@@ -16,7 +17,6 @@ public class StoreResponseDto {
 
     public StoreResponseDto(Store store) {
         this.id = store.getId();
-        this.memberId = store.getMemberId();
         this.storeName = store.getStoreName();
         this.status = store.getStatus().toString();
         this.openTime = store.getOpenTime();

@@ -2,6 +2,7 @@ package com.sparta.outsorucing.domain.store.entity;
 
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.domain.member.entity.Member;
+import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -51,4 +52,20 @@ public class Store {
     @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
+    public Store(StoreRequestDto requestDto, Status status) {
+        this.storeName = requestDto.getStoreName();
+        this.openTime = requestDto.getOpenTime();
+        this.closeTime = requestDto.getCloseTime();
+        this.minPrice = requestDto.getMinPrice();
+        this.status = status;
+    }
+
+    public void update(StoreRequestDto requestDto){
+        this.storeName = requestDto.getStoreName();
+        this.openTime = requestDto.getOpenTime();
+        this.closeTime = requestDto.getCloseTime();
+    }
+
+
 }
