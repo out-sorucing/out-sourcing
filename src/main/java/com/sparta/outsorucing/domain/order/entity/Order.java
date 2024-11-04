@@ -37,7 +37,6 @@ public class Order extends AuditingDate {
     @Comment(value = "주문 고유번호")
     private Long id;
 
-
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
