@@ -39,11 +39,15 @@ public class StoreService {
         return id;
     }
 
+    public Long deleteStore(Long id){
+        Store store = findOneStoreId(id);
+        store.storeClose(Status.ACTIVE);
+        return id;
+    }
+
     public Store findOneStoreId(Long id){
         return storeRepository.findById(id).orElseThrow(() ->
             new IllegalArgumentException("비정상적인 접근")
         );
     }
-
-
 }

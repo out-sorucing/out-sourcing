@@ -67,5 +67,8 @@ public class Store {
         this.closeTime = requestDto.getCloseTime();
     }
 
+    public void storeClose(Status status){
+        this.status = status;
+    }
 
 }
