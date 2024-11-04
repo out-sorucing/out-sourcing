@@ -1,9 +1,10 @@
 package com.sparta.outsorucing.domain.order.service;
 
+import static com.sparta.outsorucing.common.enums.MemberRole.USER;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
 
 import com.sparta.outsorucing.domain.member.entity.Member;
-
+import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
 import com.sparta.outsorucing.domain.order.dto.ChangeOrderStatusDto;
@@ -26,6 +27,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final MemberRepository memberRepository;
 
     public String requestOrder(Member member, Long menusId){
         Menu menu = menuRepository.findById(menusId)
@@ -57,17 +59,19 @@ public class OrderService {
     @Transactional
     public String changeOrderStatus(Member member, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
 
-        if(member.getRole().equals("USER")){
+        if(member.getRole().equals(USER)){
             throw new IllegalStateException("권한이 없습니다.");
         }
         Order order = orderRepository.findById(ordersId)
             .orElseThrow(()-> new IllegalStateException("Order not found"));
 
-        if(order.getStatus().equals(changeOrderStatusDto)){
-            throw new IllegalStateException("이미"+changeOrderStatusDto+"상태 입니다");
+        if(order.getStatus().equals(changeOrderStatusDto.getOrderStatus())){
+            throw new IllegalStateException("이미"+changeOrderStatusDto.getOrderStatus()+"상태 입니다");
         }
         order.update(changeOrderStatusDto.getOrderStatus());
 
-        return changeOrderStatusDto+"로 변경되었습니다";
+        return changeOrderStatusDto.getOrderStatus()+"로 변경되었습니다";
     }
+
+
 }

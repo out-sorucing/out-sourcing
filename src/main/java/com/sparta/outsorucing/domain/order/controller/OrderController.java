@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.order.controller;
 
+import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.common.enums.OrderStatus;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.order.dto.ChangeOrderStatusDto;
@@ -35,8 +36,6 @@ public class OrderController {
         Member member = (Member)request.getAttribute("member");
         return orderService.changeOrderStatus(member,ordersId,changeOrderStatusDto);
     }
-
-
 
 
 }

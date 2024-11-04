@@ -58,7 +58,7 @@ public class Order extends AuditingDate {
     private Store store;
 
 
-    public void update(OrderStatus changeOrderStatusDto) {
-        this.status=changeOrderStatusDto;
+    public void update(OrderStatus orderStatus) {
+        this.status=orderStatus;
     }
 }
