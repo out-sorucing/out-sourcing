@@ -24,7 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="out_store")
+@Table(name="store")
 @NoArgsConstructor
 public class Store {
 
