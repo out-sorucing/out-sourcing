@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,6 +31,13 @@ public class StoreController {
     public List<StoreResponseDto> findStore(){
         return storeService.findStore();
     }
+
+    // 가게 검색(소비자 입장 화면)
+    @GetMapping("/search")
+    public List<StoreResponseDto> findStoreByName(@RequestParam String keyword) {
+        return storeService.findStoreByName(keyword);
+    }
+
 
 
 }

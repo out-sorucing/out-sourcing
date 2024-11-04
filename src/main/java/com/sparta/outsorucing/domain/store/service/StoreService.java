@@ -23,4 +23,8 @@ public class StoreService {
         return storeRepository.findAll().stream().map(StoreResponseDto::new).toList();
     }
 
+    public List<StoreResponseDto> findStoreByName(String keyword){
+        return storeRepository.findAllByStoreNameContainsOrderByIdDesc(keyword).stream().map(StoreResponseDto::new).toList();
+    }
+
 }
