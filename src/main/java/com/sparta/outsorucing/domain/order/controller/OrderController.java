@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.order.controller;
 
+import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.common.enums.OrderStatus;
 import com.sparta.outsorucing.domain.member.entity.Member;
@@ -23,18 +24,17 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public String requestOrder(HttpServletRequest request, @RequestParam("menusId") Long menusId)
+    public String requestOrder(@Auth AuthMember authMember, @RequestParam("menusId") Long menusId)
     {
-        Member member = (Member)request.getAttribute("member");
-        return orderService.requestOrder(member,menusId);
+
+        return orderService.requestOrder(authMember.getId(),menusId);
     }
 
     @PutMapping("/{ordersId}")
-    public String changeOrderStatus(HttpServletRequest request, @PathVariable("ordersId") Long ordersId,@RequestBody
+    public String changeOrderStatus(@Auth AuthMember authMember, @PathVariable("ordersId") Long ordersId,@RequestBody
     ChangeOrderStatusDto changeOrderStatusDto)
     {
-        Member member = (Member)request.getAttribute("member");
-        return orderService.changeOrderStatus(member,ordersId,changeOrderStatusDto);
+        return orderService.changeOrderStatus(authMember.getMemberRole(),ordersId,changeOrderStatusDto);
     }
 
 

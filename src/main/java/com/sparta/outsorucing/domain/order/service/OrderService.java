@@ -3,6 +3,7 @@ package com.sparta.outsorucing.domain.order.service;
 import static com.sparta.outsorucing.common.enums.MemberRole.USER;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
 
+import com.sparta.outsorucing.common.enums.MemberRole;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
@@ -29,7 +30,10 @@ public class OrderService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
-    public String requestOrder(Member member, Long menusId){
+    public String requestOrder(Long membersId, Long menusId){
+
+        Member member = memberRepository.findById(membersId)
+            .orElseThrow(()-> new IllegalArgumentException("Member not found"));
         Menu menu = menuRepository.findById(menusId)
             .orElseThrow(()-> new IllegalStateException("Menus not found"));
         Store store = storeRepository.findById(menu.getStore().getId())
@@ -57,9 +61,9 @@ public class OrderService {
     }
 
     @Transactional
-    public String changeOrderStatus(Member member, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
+    public String changeOrderStatus(MemberRole memberRole, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
 
-        if(member.getRole().equals(USER)){
+        if(memberRole.equals(USER)){
             throw new IllegalStateException("권한이 없습니다.");
         }
         Order order = orderRepository.findById(ordersId)
