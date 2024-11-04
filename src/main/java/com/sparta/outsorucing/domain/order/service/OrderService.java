@@ -28,7 +28,7 @@ public class OrderService {
     public String requestOrder(Member member, Long menusId){
         Menu menu = menuRepository.findById(menusId)
             .orElseThrow(()-> new IllegalStateException("Menus not found"));
-        Store store = storeRepository.findById(Math.toIntExact(menu.getStore().getId()))
+        Store store = storeRepository.findById(menu.getStore().getId())
             .orElseThrow(()-> new IllegalStateException("Store not found"));
         // 최소 주문금액
         if(menu.getPrice()<store.getMinPrice()){

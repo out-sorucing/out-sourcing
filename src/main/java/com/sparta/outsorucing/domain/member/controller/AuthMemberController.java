@@ -22,4 +22,11 @@ public class AuthMemberController {
                 .status(HttpStatus.CREATED)
                 .body(memberService.signUp(signupRequestDto));
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<MemberResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(memberService.login(loginRequestDto));
+    }
 }

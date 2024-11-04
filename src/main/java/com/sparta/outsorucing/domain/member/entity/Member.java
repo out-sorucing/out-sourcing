@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.member.entity;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.sparta.outsorucing.common.config.PasswordEncoder;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.enums.MemberRole;
@@ -43,14 +44,13 @@ public class Member {
     private MemberRole role;
 
     @Column(name = "status", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private boolean activeStatus;
 
-    public void createMember(String nickName, String email, String password, MemberRole memberRole, Status status) {
+    public void createMember(String nickName, String email, String password, MemberRole memberRole) {
         this.nickName = nickName;
         this.email = email;
-        this.password = PasswordEncoder.encode(password);
+        this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
         this.role = memberRole;
-        this.status = status;
+        this.activeStatus = true;
     }
 }
