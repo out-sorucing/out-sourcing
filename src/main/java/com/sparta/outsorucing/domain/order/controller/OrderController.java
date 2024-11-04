@@ -34,7 +34,7 @@ public class OrderController {
     public String changeOrderStatus(@Auth AuthMember authMember, @PathVariable("ordersId") Long ordersId,@RequestBody
     ChangeOrderStatusDto changeOrderStatusDto)
     {
-        return orderService.changeOrderStatus(authMember.getMemberRole(),ordersId,changeOrderStatusDto);
+        return orderService.changeOrderStatus(authMember,ordersId,changeOrderStatusDto);
     }
 
 

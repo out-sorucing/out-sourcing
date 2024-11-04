@@ -1,9 +1,10 @@
 package com.sparta.outsorucing.domain.order.service;
 
 import static com.sparta.outsorucing.common.enums.MemberRole.USER;
+import static com.sparta.outsorucing.common.enums.OrderStatus.CANCELED;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
 
-import com.sparta.outsorucing.common.enums.MemberRole;
+import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
@@ -61,13 +62,16 @@ public class OrderService {
     }
 
     @Transactional
-    public String changeOrderStatus(MemberRole memberRole, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
-
-        if(memberRole.equals(USER)){
-            throw new IllegalStateException("권한이 없습니다.");
-        }
+    public String changeOrderStatus(AuthMember authMember, Long ordersId, ChangeOrderStatusDto changeOrderStatusDto) {
         Order order = orderRepository.findById(ordersId)
             .orElseThrow(()-> new IllegalStateException("Order not found"));
+
+        if(authMember.getId().equals(order.getMember().getId())&&changeOrderStatusDto.getOrderStatus().equals(CANCELED)){
+            throw new IllegalStateException("주문 취소 되었습니다.");
+        }
+        if(authMember.getMemberRole().equals(USER)){
+            throw new IllegalStateException("권한이 없습니다.");
+        }
 
         if(order.getStatus().equals(changeOrderStatusDto.getOrderStatus())){
             throw new IllegalStateException("이미"+changeOrderStatusDto.getOrderStatus()+"상태 입니다");
