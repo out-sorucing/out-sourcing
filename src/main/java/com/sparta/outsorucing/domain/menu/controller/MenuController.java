@@ -2,12 +2,10 @@ package com.sparta.outsorucing.domain.menu.controller;
 
 import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
-import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
 import com.sparta.outsorucing.domain.menu.dto.UpdateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.service.MenuService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
