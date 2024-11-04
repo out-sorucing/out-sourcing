@@ -27,4 +27,8 @@ public class StoreService {
         return storeRepository.findAllByStoreNameContainsOrderByIdDesc(keyword).stream().map(StoreResponseDto::new).toList();
     }
 
+    public List<StoreResponseDto> findOneStore(Long id){
+        return storeRepository.findById(id).stream().map(StoreResponseDto::new).toList();
+    }
+
 }
