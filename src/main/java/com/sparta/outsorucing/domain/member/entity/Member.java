@@ -16,7 +16,7 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name="user")
+@Table(name="member")
 @NoArgsConstructor
 public class Member {
 
