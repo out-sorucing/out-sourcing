@@ -13,6 +13,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -22,7 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Getter
 @Table(name="menu")
-@NoArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PROTECTED)
 public class Menu {
 
     @Id
@@ -30,14 +32,14 @@ public class Menu {
     @Comment(value = "메뉴 고유번호")
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     @Comment(value = "메뉴명")
     private String menuName;
 
-    @Column
+    @Column(nullable = false)
     private int price;
 
-    @Column
+    @Column(nullable = false)
     private String content;
 
     @Column(name = "status", nullable = false)
@@ -49,4 +51,12 @@ public class Menu {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
 
+    @Builder
+    public Menu(String menuName, int price, String content, Status status, Store store) {
+        this.menuName = menuName;
+        this.price = price;
+        this.content = content;
+        this.status = status;
+        this.store = store;
+    }
 }

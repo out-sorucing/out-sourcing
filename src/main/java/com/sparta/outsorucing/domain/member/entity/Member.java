@@ -1,5 +1,7 @@
 package com.sparta.outsorucing.domain.member.entity;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.sparta.outsorucing.common.config.PasswordEncoder;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.enums.MemberRole;
 import jakarta.persistence.Column;
@@ -16,7 +18,7 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name="user")
+@Table(name="member")
 @NoArgsConstructor
 public class Member {
 
@@ -42,6 +44,13 @@ public class Member {
     private MemberRole role;
 
     @Column(name = "status", nullable = false)
-    @Enumerated(value = EnumType.STRING)
-    private Status status;
+    private boolean activeStatus;
+
+    public void createMember(String nickName, String email, String password, MemberRole memberRole) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
+        this.role = memberRole;
+        this.activeStatus = true;
+    }
 }
