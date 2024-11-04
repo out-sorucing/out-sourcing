@@ -2,12 +2,10 @@ package com.sparta.outsorucing.domain.menu.controller;
 
 import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
-import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuResponseDto;
 import com.sparta.outsorucing.domain.menu.dto.UpdateMenuRequestDto;
 import com.sparta.outsorucing.domain.menu.service.MenuService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,9 +30,10 @@ public class MenuController {
         @PathVariable Long storeId,
         @Valid @RequestBody CreateMenuRequestDto createMenuRequestDto,
         @Auth AuthMember authMember) {
-        return ResponseEntity.ok().body(menuService.createMenu(storeId,
+        return ResponseEntity.status(HttpStatus.CREATED).body(menuService.createMenu(storeId,
                                                                createMenuRequestDto,
                                                                authMember.getId()));
+
 
     }
 
@@ -55,7 +54,7 @@ public class MenuController {
         @PathVariable("menuId") Long menuId,
         @Valid @RequestBody UpdateMenuRequestDto updateMenuRequestDto,
         @Auth AuthMember authMember) {
-        return ResponseEntity.ok().body(menuService.UpdateMenu(storeId,
+        return ResponseEntity.status(HttpStatus.OK).body(menuService.UpdateMenu(storeId,
                                                                menuId,
                                                                updateMenuRequestDto,
                                                                authMember.getId()));
