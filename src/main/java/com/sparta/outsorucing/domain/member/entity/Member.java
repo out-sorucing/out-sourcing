@@ -53,4 +53,8 @@ public class Member {
         this.role = memberRole;
         this.activeStatus = true;
     }
+
+    public void deleteMember() {
+        this.activeStatus = false;
+    }
 }
