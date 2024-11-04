@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,5 +44,13 @@ public class StoreController {
     public List<StoreResponseDto> findOneStore(@PathVariable Long id) {
         return storeService.findOneStore(id);
     }
+
+    @PutMapping("/{id}")
+    public Long updateStore(@PathVariable Long id, @RequestBody @Valid StoreRequestDto requestDto) {
+        return storeService.updateStore(id,requestDto);
+    }
+
+
+
 
 }
