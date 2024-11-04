@@ -24,7 +24,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="order")
+@Table(name="orders")
 @NoArgsConstructor
 public class Order extends AuditingDate {
 
@@ -32,9 +32,6 @@ public class Order extends AuditingDate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Comment(value = "주문 고유번호")
     private Long id;
-
-    @Column
-    private String orderAt;
 
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
