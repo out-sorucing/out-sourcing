@@ -37,6 +37,7 @@ public class Order extends AuditingDate {
     @Comment(value = "주문 고유번호")
     private Long id;
 
+
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private OrderStatus status;
@@ -55,4 +56,9 @@ public class Order extends AuditingDate {
     @JoinColumn(name = "store_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
+
+
+    public void update(OrderStatus orderStatus) {
+        this.status=orderStatus;
+    }
 }

@@ -24,31 +24,31 @@ public class orderAop {
     }
 
     // 주문 생성 시 적용할 Pointcut 정의
-    @Pointcut("execution(* com.sparta.outsorucing.domain.order.service.OrderService.requestOrder(..))")
-    public void orderRequestPointcut() {}
-
-    // 주문 요청 후 로그를 남기는 Advice
-    @AfterReturning(pointcut = "orderRequestPointcut()", returning = "result")
-    public void logOrderRequest(JoinPoint joinPoint, Object result) {
-        // 요청 시각 설정
-        String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
-        // JoinPoint를 통해 메소드 인자 정보 가져오기
-        Object[] args = joinPoint.getArgs();
-        Member member = (Member) args[0];
-        Long menusId = (Long) args[1];
-
-        // 메뉴와 가게 정보 가져오기
-        Menu menu = menuRepository.findById(menusId)
-            .orElseThrow(() -> new IllegalStateException("Menus not found"));
-        Long storeId = menu.getStore().getId();
-
-        // 로그 출력 (이 예제에서는 콘솔에 출력)
-        System.out.println("Order Log:");
-        System.out.println("요청 시각: " + requestTime);
-        System.out.println("가게 ID: " + storeId);
-        System.out.println("주문 ID: " + result); // `result`가 주문 ID일 경우
-    }
+//    @Pointcut("execution(* com.sparta.outsorucing.domain.order.service.OrderService.requestOrder(..))")
+//    public void orderRequestPointcut() {}
+//
+//    // 주문 요청 후 로그를 남기는 Advice
+//    @AfterReturning(pointcut = "orderRequestPointcut()", returning = "result")
+//    public void logOrderRequest(JoinPoint joinPoint, Object result) {
+//        // 요청 시각 설정
+//        String requestTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+//
+//        // JoinPoint를 통해 메소드 인자 정보 가져오기
+//        Object[] args = joinPoint.getArgs();
+//        Member member = (Member) args[0];
+//        Long menusId = (Long) args[1];
+//
+//        // 메뉴와 가게 정보 가져오기
+//        Menu menu = menuRepository.findById(menusId)
+//            .orElseThrow(() -> new IllegalStateException("Menus not found"));
+//        Long storeId = menu.getStore().getId();
+//
+//        // 로그 출력 (이 예제에서는 콘솔에 출력)
+//        System.out.println("Order Log:");
+//        System.out.println("요청 시각: " + requestTime);
+//        System.out.println("가게 ID: " + storeId);
+//        System.out.println("주문 ID: " + result); // `result`가 주문 ID일 경우
+//    }
 
 
 

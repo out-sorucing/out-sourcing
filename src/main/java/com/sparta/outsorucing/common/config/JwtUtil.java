@@ -22,7 +22,7 @@ public class JwtUtil {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
-    private static final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    private static final long TOKEN_TIME = 600 * 60 * 1000L; // 60분
 
     @Value("${jwt.secret.key}")
     private String secretKey;

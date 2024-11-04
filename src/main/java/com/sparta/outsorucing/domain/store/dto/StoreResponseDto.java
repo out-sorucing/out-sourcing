@@ -1,6 +1,5 @@
 package com.sparta.outsorucing.domain.store.dto;
 
-import com.sparta.outsorucing.domain.member.dto.MemberResponseDto;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import java.sql.Time;
 import lombok.Getter;
