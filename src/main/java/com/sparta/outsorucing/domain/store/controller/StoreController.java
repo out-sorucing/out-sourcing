@@ -43,4 +43,5 @@ public class StoreController {
     public List<StoreResponseDto> findOneStore(@PathVariable Long id) {
         return storeService.findOneStore(id);
     }
+
 }
