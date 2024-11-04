@@ -8,6 +8,7 @@ import com.sparta.outsorucing.domain.store.repository.StoreRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,4 @@ public class StoreService {
     public List<StoreResponseDto> findOneStore(Long id){
         return storeRepository.findById(id).stream().map(StoreResponseDto::new).toList();
     }
-
-
-
 }
