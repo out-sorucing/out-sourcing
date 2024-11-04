@@ -35,7 +35,7 @@ public class MenuController {
         return ResponseEntity.ok().body(menuService.createMenu(storeId,
                                                                createMenuRequestDto,
                                                                authMember.getId()));
-                                                               authMember.getId()));
+
     }
 
     @DeleteMapping("/{storeId}/menus/{menuId}")
