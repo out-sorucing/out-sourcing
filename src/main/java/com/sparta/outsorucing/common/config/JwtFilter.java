@@ -32,7 +32,7 @@ public class JwtFilter implements Filter {
 
         String url = httpRequest.getRequestURI();
 
-        if (url.startsWith("/api/auth")||url.matches("^/api/stores/\\d+/reviews.*$")) {
+        if (url.startsWith("/api/auth")||url.matches("^/api/stores/\\d+/reviews.*$")||url.equals("/")) {
             chain.doFilter(request, response);
             return;
         }

@@ -56,10 +56,6 @@ public class AuthMemberController {
 
         System.out.println("token: "+token);
 
-//        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
-//        cookie.setPath("/");
-//        response.addCookie(cookie);
-
-        return "redirect:/";
+        return token;
     }
 }
