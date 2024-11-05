@@ -95,11 +95,6 @@ public class StoreService {
 
     public Favorites createFavorites(Long storeId, Long memberId, String memberRole) {
         findMemberId(memberId);
-
-        System.out.println("가게 아이디 : "+storeId);
-        System.out.println("회원 아이디 : "+memberId);
-        System.out.println("회원 권한 : "+memberRole);
-
         if(memberRole.equals("OWNER")) {
             throw new IllegalArgumentException("일반회원들만 즐겨찾기를 추가할 수 있습니다.");
         }
@@ -116,9 +111,25 @@ public class StoreService {
         return favoritesRepository.save(new Favorites(storeId, memberId, storeName, openTime, closeTime, minPrice));
     }
 
+    public Long deleteFavorites(Long id, Long memberId, String memberRole){
+        findMemberId(memberId);
+        if(memberRole.equals("OWNER")) {
+            throw new IllegalArgumentException("일반회원들만 즐겨찾기를 삭제할 수 있습니다.");
+        }
+        Favorites favorites = findFavorites(id);
+        favoritesRepository.delete(favorites);
+        return id;
+    }
+
     public Store findOneStoreId(Long storeId){
         return storeRepository.findById(storeId).orElseThrow(() ->
             new IllegalArgumentException("존재하지 않는 가게 입니다.")
+        );
+    }
+
+    public Favorites findFavorites(Long id){
+        return favoritesRepository.findById(id).orElseThrow(() ->
+            new IllegalArgumentException("존재하지 않는 즐겨찾기입니다.")
         );
     }
 

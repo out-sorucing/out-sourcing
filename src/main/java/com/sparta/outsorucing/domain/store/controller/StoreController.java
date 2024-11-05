@@ -77,4 +77,10 @@ public class StoreController {
         return storeService.createFavorites(storeId, authMember.getId(), String.valueOf(authMember.getMemberRole()));
     }
 
+    // 삭제
+    @DeleteMapping("/favorites/{id}")
+    public Long deleteFavorites(@PathVariable Long id, @Auth AuthMember authMember) {
+        return storeService.deleteFavorites(id, authMember.getId(), String.valueOf(authMember.getMemberRole()));
+    }
+
 }
