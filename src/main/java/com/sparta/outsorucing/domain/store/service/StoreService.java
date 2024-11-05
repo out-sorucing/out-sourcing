@@ -8,7 +8,7 @@ import com.sparta.outsorucing.domain.favorites.repository.FavoritesRepository;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
-import com.sparta.outsorucing.domain.menu.entity.Menu;
+import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
 import com.sparta.outsorucing.domain.store.dto.StoreOneResponseDto;
 import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
 import com.sparta.outsorucing.domain.store.dto.StoreResponseDto;
@@ -26,6 +26,7 @@ public class StoreService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
     private final FavoritesRepository favoritesRepository;
+    private final MenuRepository menuRepository;
 
     public StoreResponseDto createStore(StoreRequestDto requestDto, Long memberId, String memberRole) {
         if(memberRole.equals("USER")) {
@@ -58,8 +59,11 @@ public class StoreService {
         return storeRepository.findAllByStoreNameContainsOrderByIdDesc(keyword).stream().map(StoreResponseDto::new).toList();
     }
 
-    public List<StoreOneResponseDto> findOneStore(Long storeId){
-        return storeRepository.findOneStoreAndMenu(storeId).stream().map(StoreOneResponseDto::new).toList();
+    // 가게 단건 조회
+    public StoreOneResponseDto findOneStore(Long storeId){
+        Store store = storeRepository.findAllById(storeId);
+        List<MenuResponseDto> menuResponseDto = menuRepository.findByStoreId(storeId).stream().map(MenuResponseDto::new).toList();
+        return new StoreOneResponseDto(store,menuResponseDto);
     }
 
     public List<StoreResponseDto> findByMenuName(String keyword) {
@@ -105,6 +109,10 @@ public class StoreService {
         if(store.getStatus().equals(Status.DELETE)) {
             throw new IllegalArgumentException("운영중인 가게만 즐겨찾기를 추가할 수 있습니다.");
         }
+        int checkStoreId = favoritesRepository.countByStoreIdAndMemberId(storeId, memberId);
+        if(checkStoreId > 0) {
+            throw new IllegalArgumentException("이미 즐겨찾기에 추가한 가게입니다.");
+        }
 
         String storeName = store.getStoreName();
         String openTime = store.getOpenTime();
@@ -118,7 +126,7 @@ public class StoreService {
         if(memberRole.equals("OWNER")) {
             throw new IllegalArgumentException("일반회원들만 즐겨찾기를 조회할 수 있습니다.");
         }
-        return favoritesRepository.findAll().stream().map(FavoritesResponseDto::new).toList();
+        return favoritesRepository.findByMemberId(memberId).stream().map(FavoritesResponseDto::new).toList();
     }
 
     public Long deleteFavorites(Long id, Long memberId, String memberRole){
