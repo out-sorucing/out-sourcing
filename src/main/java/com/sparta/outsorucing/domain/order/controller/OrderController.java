@@ -27,8 +27,7 @@ public class OrderController {
 
     @PostMapping
     public String requestOrder(@Auth AuthMember authMember, @RequestParam("menusId") Long menusId) {
-
-        return orderService.requestOrder(authMember.getId(), menusId);
+        return orderService.requestOrder(authMember, menusId);
     }
 
     @PutMapping("/{ordersId}")
@@ -41,10 +40,26 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<Page<OrdersResponseDto>> retrieveOrders(@Auth AuthMember authMember,
         @RequestParam(required = false, defaultValue = "0") int page,
-        @RequestParam(required = false, defaultValue = "10") int size) {
+        @RequestParam(required = false, defaultValue = "5") int size) {
         return ResponseEntity.status(HttpStatus.OK)
             .body(orderService.retrieveOrders(authMember, page, size));
     }
 
+    @GetMapping("/stores")
+    public ResponseEntity<Page<OrdersResponseDto>> retrieveOrdersByStore(
+        @Auth AuthMember authMember,
+        @RequestParam("storesId") Long storesId,
+        @RequestParam(required = false, defaultValue = "0") int page,
+        @RequestParam(required = false, defaultValue = "5") int size) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(orderService.retrieveOrdersByStore(authMember, storesId, page, size));
+    }
+
+    @GetMapping("/{ordersId}")
+    public ResponseEntity<OrdersResponseDto> findOrdersById(@Auth AuthMember authMember,
+        @PathVariable("ordersId") Long ordersId) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(orderService.retrieveOrdersById(authMember, ordersId));
+    }
 
 }
