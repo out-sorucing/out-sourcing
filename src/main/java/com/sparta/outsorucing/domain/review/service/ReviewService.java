@@ -65,4 +65,16 @@ public class ReviewService {
                 )
         ).collect(Collectors.toList());
     }
+
+    public List<ReviewResponseDto> findReviewsByRating(Long storeId, int rating) {
+        List<Review> reviews = reviewRepository.findByStoreIdAndRating(storeId, rating);
+        return reviews.stream().map(review ->
+                new ReviewResponseDto(
+                        review.getId(),
+                        review.getOrder().getMember().getId(),
+                        review.getContent(),
+                        review.getRating()
+                )
+        ).collect(Collectors.toList());
+    }
 }
