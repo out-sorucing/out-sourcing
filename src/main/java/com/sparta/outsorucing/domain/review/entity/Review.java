@@ -2,6 +2,7 @@ package com.sparta.outsorucing.domain.review.entity;
 
 import com.sparta.outsorucing.common.AuditingDate;
 import com.sparta.outsorucing.domain.order.entity.Order;
+import com.sparta.outsorucing.domain.review.dto.ReviewRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,4 +39,12 @@ public class Review extends AuditingDate {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Order order;
 
+    public static Review createReview(Order order, ReviewRequestDto reviewRequestDto) {
+        Review review = new Review();
+        review.content = reviewRequestDto.getContent();
+        review.rating = reviewRequestDto.getRating();
+        review.order = order;
+
+        return review;
+    }
 }
