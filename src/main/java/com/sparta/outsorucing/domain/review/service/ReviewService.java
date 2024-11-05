@@ -45,6 +45,10 @@ public class ReviewService {
             throw new IllegalArgumentException("1-5 사이의 정수로 별점을 부여할 수 있습니다");
         }
 
+        if(reviewRepository.existsByOrderId(orderId)){
+            throw new IllegalArgumentException("한 주문당 하나의 리뷰만 작성할 수 있습니다");
+        }
+
         int rating = (Integer)reviewRequestDto.getRating();
 
         Review review = reviewRepository.save(Review.createReview(order, reviewRequestDto));
