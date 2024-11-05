@@ -6,6 +6,7 @@ import com.sparta.outsorucing.domain.member.dto.MemberResponseDto;
 import com.sparta.outsorucing.domain.member.dto.SignupRequestDto;
 import com.sparta.outsorucing.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AuthMemberController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<MemberResponseDto> signUp(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<MemberResponseDto> signUp(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberService.signUp(signupRequestDto));
