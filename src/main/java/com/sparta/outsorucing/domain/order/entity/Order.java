@@ -1,10 +1,10 @@
 package com.sparta.outsorucing.domain.order.entity;
 
-import com.sparta.outsorucing.domain.menu.entity.Menu;
-import com.sparta.outsorucing.common.enums.OrderStatus;
-import com.sparta.outsorucing.domain.store.entity.Store;
 import com.sparta.outsorucing.common.AuditingDate;
+import com.sparta.outsorucing.common.enums.OrderStatus;
 import com.sparta.outsorucing.domain.member.entity.Member;
+import com.sparta.outsorucing.domain.menu.entity.Menu;
+import com.sparta.outsorucing.domain.store.entity.Store;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +27,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Getter
 @Builder
-@Table(name="orders")
+@Table(name = "orders")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order extends AuditingDate {
@@ -37,6 +37,8 @@ public class Order extends AuditingDate {
     @Comment(value = "주문 고유번호")
     private Long id;
 
+    @Column(nullable = false)
+    private int price;
 
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
@@ -59,6 +61,6 @@ public class Order extends AuditingDate {
 
 
     public void update(OrderStatus orderStatus) {
-        this.status=orderStatus;
+        this.status = orderStatus;
     }
 }

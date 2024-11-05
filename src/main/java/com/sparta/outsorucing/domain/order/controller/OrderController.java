@@ -30,6 +30,12 @@ public class OrderController {
         return orderService.requestOrder(authMember, menusId);
     }
 
+    @PostMapping("/{ordersId}")
+    public String requestReOrder(@Auth AuthMember authMember,
+        @PathVariable("ordersId") Long ordersId) {
+        return orderService.requestReOrder(authMember, ordersId);
+    }
+
     @PutMapping("/{ordersId}")
     public String changeOrderStatus(@Auth AuthMember authMember,
         @PathVariable("ordersId") Long ordersId, @RequestBody
