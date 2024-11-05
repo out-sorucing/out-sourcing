@@ -2,6 +2,8 @@ package com.sparta.outsorucing.domain.store.service;
 
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
+import com.sparta.outsorucing.domain.favorites.entity.Favorites;
+import com.sparta.outsorucing.domain.favorites.repository.FavoritesRepository;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
@@ -22,6 +24,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
+    private final FavoritesRepository favoritesRepository;
 
     public StoreResponseDto createStore(StoreRequestDto requestDto, Long memberId, String memberRole) {
         if(memberRole.equals("USER")) {
@@ -88,6 +91,29 @@ public class StoreService {
         }
         store.storeClose(Status.DELETE);
         return store.getStoreName();
+    }
+
+    public Favorites createFavorites(Long storeId, Long memberId, String memberRole) {
+        findMemberId(memberId);
+
+        System.out.println("가게 아이디 : "+storeId);
+        System.out.println("회원 아이디 : "+memberId);
+        System.out.println("회원 권한 : "+memberRole);
+
+        if(memberRole.equals("OWNER")) {
+            throw new IllegalArgumentException("일반회원들만 즐겨찾기를 추가할 수 있습니다.");
+        }
+
+        Store store = findOneStoreId(storeId);
+        if(store.getStatus().equals(Status.DELETE)) {
+            throw new IllegalArgumentException("운영중인 가게만 즐겨찾기를 추가할 수 있습니다.");
+        }
+
+        String storeName = store.getStoreName();
+        String openTime = store.getOpenTime();
+        String closeTime = store.getCloseTime();
+        int minPrice = store.getMinPrice();
+        return favoritesRepository.save(new Favorites(storeId, memberId, storeName, openTime, closeTime, minPrice));
     }
 
     public Store findOneStoreId(Long storeId){
