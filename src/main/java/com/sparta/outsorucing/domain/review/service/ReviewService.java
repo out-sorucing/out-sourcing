@@ -8,8 +8,12 @@ import com.sparta.outsorucing.domain.review.dto.ReviewRequestDto;
 import com.sparta.outsorucing.domain.review.dto.ReviewResponseDto;
 import com.sparta.outsorucing.domain.review.entity.Review;
 import com.sparta.outsorucing.domain.review.repository.ReviewRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.sparta.outsorucing.common.enums.OrderStatus.COMPLETED;
 
@@ -46,5 +50,19 @@ public class ReviewService {
         Review review = reviewRepository.save(Review.createReview(order, reviewRequestDto));
 
         return new ReviewResponseDto(review.getId(), id, reviewRequestDto.getContent(), rating);
+    }
+
+    @Transactional
+    public List<ReviewResponseDto> findReviewsByCreatedAt(Long storeId) {
+        List<Review> reviews = reviewRepository.findByStoreIdOrderByCreatedAtDesc(storeId);
+
+        return reviews.stream().map(review ->
+                new ReviewResponseDto(
+                        review.getId(),
+                        review.getOrder().getMember().getId(),
+                        review.getContent(),
+                        review.getRating()
+                )
+        ).collect(Collectors.toList());
     }
 }
