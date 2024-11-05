@@ -34,4 +34,12 @@ public class ReviewController {
                 .body(reviews);
     }
 
+    @GetMapping("/stores/{storeId}/reviews/rating")
+    public ResponseEntity<List<ReviewResponseDto>> findReviewsByRating(@PathVariable Long storeId, @RequestParam int rating) {
+        List<ReviewResponseDto> reviews = reviewService.findReviewsByRating(storeId, rating);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviews);
+    }
+
 }
