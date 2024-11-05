@@ -2,6 +2,7 @@ package com.sparta.outsorucing.domain.store.controller;
 
 import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
+import com.sparta.outsorucing.domain.favorites.entity.Favorites;
 import com.sparta.outsorucing.domain.store.dto.StoreOneResponseDto;
 import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
 import com.sparta.outsorucing.domain.store.dto.StoreResponseDto;
@@ -57,8 +58,6 @@ public class StoreController {
         return ResponseEntity.ok(storeService.findByMenuName(keyword));
     }
 
-
-
     @PutMapping("/{storeId}")
     public Long updateStore(@PathVariable Long storeId, @RequestBody @Valid StoreRequestDto requestDto, @Auth AuthMember authMember) {
         return storeService.updateStore(storeId,requestDto, authMember.getId(), String.valueOf(authMember.getMemberRole()));
@@ -70,6 +69,11 @@ public class StoreController {
         return ResponseEntity.status(HttpStatus.OK).body(storeName + "이 폐업되었습니다.");
     }
 
-
+    // [즐겨찾기]
+    // 생성
+    @GetMapping("/favorites/{storeId}")
+    public Favorites createFavorites(@PathVariable Long storeId, @Auth AuthMember authMember) {
+        return storeService.createFavorites(storeId, authMember.getId(), String.valueOf(authMember.getMemberRole()));
+    }
 
 }
