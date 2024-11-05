@@ -46,13 +46,20 @@ public class OrderController {
     }
 
     @GetMapping("/stores")
-    public ResponseEntity<Page<OrdersResponseDto>> retrieveOrdersById(@Auth AuthMember authMember,
+    public ResponseEntity<Page<OrdersResponseDto>> retrieveOrdersByStore(
+        @Auth AuthMember authMember,
         @RequestParam("storesId") Long storesId,
         @RequestParam(required = false, defaultValue = "0") int page,
         @RequestParam(required = false, defaultValue = "5") int size) {
         return ResponseEntity.status(HttpStatus.OK)
-            .body(orderService.retrieveOrdersById(authMember, storesId, page, size));
+            .body(orderService.retrieveOrdersByStore(authMember, storesId, page, size));
     }
 
+    @GetMapping("/{ordersId}")
+    public ResponseEntity<OrdersResponseDto> findOrdersById(@Auth AuthMember authMember,
+        @PathVariable("ordersId") Long ordersId) {
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(orderService.retrieveOrdersById(authMember, ordersId));
+    }
 
 }

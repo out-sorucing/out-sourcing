@@ -1,7 +1,6 @@
 package com.sparta.outsorucing.domain.order.service;
 
 import static com.sparta.outsorucing.common.enums.MemberRole.OWNER;
-import static com.sparta.outsorucing.common.enums.MemberRole.USER;
 import static com.sparta.outsorucing.common.enums.OrderStatus.CANCELED;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
 
@@ -40,8 +39,8 @@ public class OrderService {
         Member member = findMember(authMember);
         Menu menu = menuRepository.findById(menusId)
             .orElseThrow(() -> new IllegalStateException("Menus not found"));
-        Store store = storeRepository.findById(menu.getStore().getId())
-            .orElseThrow(() -> new IllegalStateException("Store not found"));
+        Store store = findStore(menu.getStore().getId());
+
         // 최소 주문금액
         if (menu.getPrice() < store.getMinPrice()) {
             throw new IllegalStateException("최소주문금액이 부족합니다.");
@@ -67,15 +66,14 @@ public class OrderService {
     @Transactional
     public String changeOrderStatus(AuthMember authMember, Long ordersId,
         ChangeOrderStatusDto changeOrderStatusDto) {
-        Order order = orderRepository.findById(ordersId)
-            .orElseThrow(() -> new IllegalStateException("Order not found"));
+        Order order = findOrder(ordersId);
 
         if (authMember.getId().equals(order.getMember().getId())
             && changeOrderStatusDto.getOrderStatus().equals(CANCELED)) {
             order.update(changeOrderStatusDto.getOrderStatus());
             return changeOrderStatusDto.getOrderStatus() + "로 변경되었습니다";
         }
-        if (authMember.getMemberRole().equals(USER)) {
+        if (authMember.getId().equals(order.getStore().getId())) {
             throw new IllegalStateException("권한이 없습니다.");
         }
 
@@ -96,12 +94,10 @@ public class OrderService {
         return order.map(OrdersResponseDto::new);
     }
 
-    public Page<OrdersResponseDto> retrieveOrdersById(AuthMember authMember, Long storesId,
+    public Page<OrdersResponseDto> retrieveOrdersByStore(AuthMember authMember, Long storesId,
         int page, int size) {
         Member member = findMember(authMember);
-
-        Store store = storeRepository.findById(storesId)
-            .orElseThrow(() -> new IllegalStateException("Store not found"));
+        Store store = findStore(storesId);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
@@ -114,9 +110,31 @@ public class OrderService {
         return order.map(OrdersResponseDto::new);
     }
 
+    public OrdersResponseDto retrieveOrdersById(AuthMember authMember, Long ordersId) {
+        Member member = findMember(authMember);
+        Order order = findOrder(ordersId);
+
+        if (!member.getId().equals(order.getMember().getId()) && !member.getId()
+            .equals(order.getStore().getMember().getId())) {
+            throw new IllegalStateException("내 주문이 아닙니다.");
+        }
+
+        return OrdersResponseDto.of(order);
+    }
+
     private Member findMember(AuthMember authMember) {
         return memberRepository.findById(authMember.getId())
             .orElseThrow(() -> new IllegalStateException("user not found"));
+    }
+
+    private Store findStore(Long storesId) {
+        return storeRepository.findById(storesId)
+            .orElseThrow(() -> new IllegalStateException("store not found"));
+    }
+
+    private Order findOrder(Long ordersId) {
+        return orderRepository.findById(ordersId)
+            .orElseThrow(() -> new IllegalStateException("order not found"));
     }
 
 
