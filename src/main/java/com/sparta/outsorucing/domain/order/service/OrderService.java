@@ -75,6 +75,12 @@ public class OrderService {
         return "주문이 완료되었습니다.";
     }
 
+    public String requestReOrder(AuthMember authMember, Long ordersId) {
+        Order order = findOrder(ordersId);
+
+        return requestOrder(authMember, order.getId());
+    }
+
     @Transactional
     public String changeOrderStatus(AuthMember authMember, Long ordersId,
         ChangeOrderStatusDto changeOrderStatusDto) {
