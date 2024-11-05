@@ -43,7 +43,7 @@ public class MenuService {
         UpdateMenuRequestDto updateMenuRequestDto,
         Long memberId) {
         validateStoreOwner(memberId, getStore(storeId));
-        Menu menu = menuRepository.findByMenuIdAndStoreId(menuId, storeId);
+        Menu menu = getMenu(menuId, storeId);
         if (menu.checkedStatus()) {
             throw new InvalidRequestException("삭제된 메뉴입니다.");
         }
@@ -57,7 +57,7 @@ public class MenuService {
         Long menuId,
         Long memberId) {
         validateStoreOwner(memberId, getStore(storeId));
-        Menu menu = menuRepository.findByMenuIdAndStoreId(menuId, storeId);
+        Menu menu = getMenu(menuId, storeId);
         if (menu.checkedStatus()) {
             throw new InvalidRequestException("이미 삭제된 메뉴입니다.");
         }
@@ -67,6 +67,10 @@ public class MenuService {
 
     private Store getStore(Long storeId) {
        return storeRepository.findById(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
+    }
+
+    private Menu getMenu(Long menuId, Long storeId){
+        return menuRepository.findByIdAndStoreId(menuId, storeId).orElseThrow(() -> new InvalidRequestException("가게에 존재하지 않는 메뉴입니다."));
     }
 
     private void validateStoreOwner(
