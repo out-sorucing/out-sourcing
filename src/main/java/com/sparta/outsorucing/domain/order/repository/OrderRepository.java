@@ -14,4 +14,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findByMemberAndStore(Member member, Store store, Pageable pageable);
 
     Page<Order> findByStore(Store store, Pageable pageable);
+
+    int countByMember(Member member);
 }
