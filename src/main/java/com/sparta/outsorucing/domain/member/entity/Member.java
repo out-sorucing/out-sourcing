@@ -46,13 +46,29 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    public void createMember(String nickName, String email, String password,
-        MemberRole memberRole) {
+
+    private Long kakaoId;
+
+    public void createMember(String nickName, String email, String password, MemberRole memberRole) {
         this.nickName = nickName;
         this.email = email;
         this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
         this.role = memberRole;
         this.status = Status.ACTIVE;
+    }
+
+    public Member(String nickName, String email, String password, MemberRole memberRole, Long kakaoId) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.role = memberRole;
+        this.status = Status.ACTIVE;
+        this.kakaoId = kakaoId;
+    }
+
+    public Member kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
     public void deleteMember() {
