@@ -1,8 +1,9 @@
 package com.sparta.outsorucing.domain.favorites.dto;
 
 import com.sparta.outsorucing.domain.favorites.entity.Favorites;
-import com.sparta.outsorucing.domain.store.entity.Store;
+import lombok.Getter;
 
+@Getter
 public class FavoritesResponseDto {
     private final Long id;
     private final Long memberId;

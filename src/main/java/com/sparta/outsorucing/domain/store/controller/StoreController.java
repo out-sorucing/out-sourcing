@@ -56,7 +56,7 @@ public class StoreController {
     }
 
     @GetMapping("/{storeId}")
-    public List<StoreOneResponseDto> findOneStore(@PathVariable Long storeId) {
+    public StoreOneResponseDto findOneStore(@PathVariable Long storeId) {
         return storeService.findOneStore(storeId);
     }
   
