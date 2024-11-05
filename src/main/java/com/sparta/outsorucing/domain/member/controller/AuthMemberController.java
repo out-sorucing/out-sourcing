@@ -35,7 +35,8 @@ public class AuthMemberController {
                 memberResponseDto.getMemberId(),
                 memberResponseDto.getNickName(),
                 memberResponseDto.getEmail(),
-                memberResponseDto.getRole()
+                memberResponseDto.getRole(),
+                memberResponseDto.getStatus()
         );
 
         System.out.println("token: "+token);
