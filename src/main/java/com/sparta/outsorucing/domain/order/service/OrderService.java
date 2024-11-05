@@ -3,6 +3,7 @@ package com.sparta.outsorucing.domain.order.service;
 import static com.sparta.outsorucing.common.enums.MemberRole.OWNER;
 import static com.sparta.outsorucing.common.enums.OrderStatus.CANCELED;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
+import static com.sparta.outsorucing.common.enums.Status.VIP;
 
 import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.domain.member.entity.Member;
@@ -34,6 +35,7 @@ public class OrderService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
+    @Transactional
     public String requestOrder(AuthMember authMember, Long menusId) {
 
         Member member = findMember(authMember);
@@ -51,14 +53,24 @@ public class OrderService {
             dateFormat.format(new Date()).compareTo(store.getCloseTime()) > 0) {
             throw new IllegalStateException("오픈시간이 아닙니다.");
         }
+        int price = menu.getPrice();
+        if (member.getStatus().equals(VIP)) {
+            price = price *= 0.95;
+        }
 
         Order order = Order.builder().status(ORDERED)
             .member(member)
+            .price(price)
             .menu(menu)
             .store(store)
             .build();
 
         orderRepository.save(order);
+
+        int countOrder = orderRepository.countByMember(member);
+        if (countOrder == 10) {
+            member.update(VIP);
+        }
 
         return "주문이 완료되었습니다.";
     }
