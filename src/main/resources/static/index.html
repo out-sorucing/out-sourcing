@@ -1,0 +1,19 @@
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>카카오로그인</title>
+</head>
+<body>
+<div style="margin-top: 10px; text-align: center;">
+  <p>왜 안됨?</p>
+  <a href="javascript:void(0);" onclick="kakaoLogin()"><img src="/images/kakaologin.png" alt="" style="width: 100px; height: 100px"></a>
+</div>
+<script>
+  function kakaoLogin() {
+    location.href = "https://kauth.kakao.com/oauth/authorize?client_id=a182421c694a43d7565f06eacf8ec0bc&redirect_uri=http://localhost:8080/api/auth/members/kakao/callback&response_type=code"
+  }
+</script>
+</body>
+</html>
+
