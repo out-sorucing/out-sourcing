@@ -2,6 +2,7 @@ package com.sparta.outsorucing.domain.store.controller;
 
 import com.sparta.outsorucing.common.annotation.Auth;
 import com.sparta.outsorucing.common.dto.AuthMember;
+import com.sparta.outsorucing.domain.favorites.dto.FavoritesResponseDto;
 import com.sparta.outsorucing.domain.favorites.entity.Favorites;
 import com.sparta.outsorucing.domain.store.dto.StoreOneResponseDto;
 import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
@@ -39,7 +40,7 @@ public class StoreController {
     // 전체 가게목록 조회(소비자 입장 화면)
     @GetMapping
     public List<StoreResponseDto> findStore(@Auth AuthMember authMember){
-        return storeService.findStore(String.valueOf(authMember.getMemberRole()));
+        return storeService.findStore(authMember.getId(), String.valueOf(authMember.getMemberRole()));
     }
 
     // 가게 검색(소비자 입장 화면)
@@ -75,6 +76,12 @@ public class StoreController {
     @GetMapping("/favorites/{storeId}")
     public Favorites createFavorites(@PathVariable Long storeId, @Auth AuthMember authMember) {
         return storeService.createFavorites(storeId, authMember.getId(), String.valueOf(authMember.getMemberRole()));
+    }
+
+    // 조회
+    @GetMapping("/favorites")
+    public List<FavoritesResponseDto> findFavorites(@Auth AuthMember authMember){
+        return storeService.findFavorites(authMember.getId(), String.valueOf(authMember.getMemberRole()));
     }
 
     // 삭제

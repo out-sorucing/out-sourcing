@@ -2,6 +2,7 @@ package com.sparta.outsorucing.domain.store.service;
 
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
+import com.sparta.outsorucing.domain.favorites.dto.FavoritesResponseDto;
 import com.sparta.outsorucing.domain.favorites.entity.Favorites;
 import com.sparta.outsorucing.domain.favorites.repository.FavoritesRepository;
 import com.sparta.outsorucing.domain.member.entity.Member;
@@ -41,7 +42,8 @@ public class StoreService {
     }
 
     // 전체 가게목록 조회(소비자 입장 화면)
-    public List<StoreResponseDto> findStore(String memberRole){
+    public List<StoreResponseDto> findStore(Long memberId, String memberRole){
+        findMemberId(memberId);
         if(memberRole.equals("OWNER")) {
             throw new IllegalArgumentException("일반회원들만 전체 가게를 조회할 수 있습니다.");
         }
@@ -109,6 +111,14 @@ public class StoreService {
         String closeTime = store.getCloseTime();
         int minPrice = store.getMinPrice();
         return favoritesRepository.save(new Favorites(storeId, memberId, storeName, openTime, closeTime, minPrice));
+    }
+
+    public List<FavoritesResponseDto> findFavorites(Long memberId, String memberRole){
+        findMemberId(memberId);
+        if(memberRole.equals("OWNER")) {
+            throw new IllegalArgumentException("일반회원들만 즐겨찾기를 조회할 수 있습니다.");
+        }
+        return favoritesRepository.findAll().stream().map(FavoritesResponseDto::new).toList();
     }
 
     public Long deleteFavorites(Long id, Long memberId, String memberRole){
