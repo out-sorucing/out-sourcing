@@ -1,6 +1,5 @@
 package com.sparta.outsorucing.domain.menu.repository;
 
-import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import java.util.List;
 import java.util.Optional;
@@ -16,4 +15,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
 
     @Query("select m from Menu m where m.store.id = :storeId and m.status = 'ACTIVE'")
     List<Menu> findByStoreIdAndStatus(Long storeId);
+
+    boolean existsByMenuNameAndStoreId(String menuName, Long storeId);
 }
