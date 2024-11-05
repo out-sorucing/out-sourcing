@@ -1,7 +1,5 @@
 package com.sparta.outsorucing.domain.store.service;
 
-import com.sparta.outsorucing.common.config.JwtUtil;
-import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.member.entity.Member;
@@ -10,15 +8,10 @@ import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
 import com.sparta.outsorucing.domain.store.dto.StoreResponseDto;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import com.sparta.outsorucing.domain.store.repository.StoreRepository;
-import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Service
 @RequiredArgsConstructor
@@ -44,6 +37,10 @@ public class StoreService {
 
     public List<StoreResponseDto> findStoreByName(String keyword){
         return storeRepository.findAllByStoreNameContainsOrderByIdDesc(keyword).stream().map(StoreResponseDto::new).toList();
+    }
+
+    public List<StoreResponseDto> findByMenuName(String keyword) {
+        return storeRepository.findAllByMenuName(keyword).stream().map(StoreResponseDto::new).toList();
     }
 
     public List<StoreResponseDto> findOneStore(Long id){
@@ -82,7 +79,4 @@ public class StoreService {
             new IllegalArgumentException("비정상적인 접근")
         );
     }
-
-
-
 }

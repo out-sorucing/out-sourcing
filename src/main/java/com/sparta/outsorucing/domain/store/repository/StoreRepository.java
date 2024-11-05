@@ -16,4 +16,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 가게 3개 개수 체크
     int countByMemberId(Long memberId);
 
+    @Query("select s from Store s left join Menu m on s.id = m.store.id where m.menuName like %:menuName%")
+    List<Store> findAllByMenuName(String menuName);
+
 }

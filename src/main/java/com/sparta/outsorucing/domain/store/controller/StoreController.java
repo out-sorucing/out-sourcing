@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -47,6 +48,12 @@ public class StoreController {
         return storeService.findStoreByName(keyword);
     }
 
+    // 메뉴 검색
+    @GetMapping("/menus/search")
+    public ResponseEntity<List<StoreResponseDto>> findByMenuName(@RequestParam String keyword) {
+        return ResponseEntity.ok(storeService.findByMenuName(keyword));
+    }
+
     @GetMapping("/{id}")
     public List<StoreResponseDto> findOneStore(@PathVariable Long id) {
         return storeService.findOneStore(id);
@@ -61,7 +68,4 @@ public class StoreController {
     public Long deleteStore(@PathVariable Long id, @Auth AuthMember authMember) {
         return storeService.deleteStore(id, authMember.getId());
     }
-
-
-
 }
