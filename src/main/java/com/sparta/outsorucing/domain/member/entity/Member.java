@@ -43,18 +43,18 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private MemberRole role;
 
-    @Column(name = "status", nullable = false)
-    private boolean activeStatus;
+    @Column(name = "status")
+    private Status status;
 
     public void createMember(String nickName, String email, String password, MemberRole memberRole) {
         this.nickName = nickName;
         this.email = email;
         this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
         this.role = memberRole;
-        this.activeStatus = true;
+        this.status = Status.ACTIVE;
     }
 
     public void deleteMember() {
-        this.activeStatus = false;
+        this.status = Status.DELETE;
     }
 }

@@ -32,7 +32,7 @@ public class JwtFilter implements Filter {
 
         String url = httpRequest.getRequestURI();
 
-        if (url.startsWith("/api/auth")||httpRequest.getMethod().equalsIgnoreCase("GET")) {
+        if (url.startsWith("/api/auth")||url.matches("^/api/stores/\\d+/reviews.*$")) {
             chain.doFilter(request, response);
             return;
         }
@@ -57,6 +57,7 @@ public class JwtFilter implements Filter {
             httpRequest.setAttribute("nickName", claims.get("nickName"));
             httpRequest.setAttribute("email", claims.get("email"));
             httpRequest.setAttribute("memberRole", claims.get("memberRole"));
+            httpRequest.setAttribute("status", claims.get("status"));
 
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {
@@ -79,4 +80,3 @@ public class JwtFilter implements Filter {
         Filter.super.destroy();
     }
 }
-

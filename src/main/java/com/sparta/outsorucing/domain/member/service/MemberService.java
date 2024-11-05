@@ -41,7 +41,7 @@ public class MemberService {
         );
         memberRepository.save(member);
 
-        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), memberRole);
+        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), memberRole, member.getStatus());
     }
 
     public MemberResponseDto login(LoginRequestDto loginRequestDto) {
@@ -52,13 +52,13 @@ public class MemberService {
             throw new AuthException("이메일 또는 비밀번호가 잘못되었습니다.");
         }
 
-        if(!member.isActiveStatus()){
+        if(member.getStatus().equals(Status.DELETE)) {
             throw new AuthException("탈퇴한 회원입니다");
         }
 
-        jwtUtil.createToken(member.getId(), member.getEmail(), member.getNickName(), member.getRole());
+        jwtUtil.createToken(member.getId(), member.getEmail(), member.getNickName(), member.getRole(), member.getStatus());
 
-        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), member.getRole());
+        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), member.getRole(), member.getStatus());
     }
 
     @Transactional
