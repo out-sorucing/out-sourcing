@@ -38,7 +38,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 생성 - 메뉴 추가 성공 테스트")
-    void test(){
+    void createTest1(){
         //given
         Store store = new Store();
         Member member = new Member();
@@ -66,7 +66,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 생성 - 존재하지 않는 가게일 시 예외처리")
-    void test1(){
+    void createTest2(){
         //given
         Member member = new Member();
         CreateMenuRequestDto createMenuRequestDto = new CreateMenuRequestDto();
@@ -80,7 +80,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 생성 - 본인의 가게가 아닐 시 예외처리")
-    void test2(){
+    void createTest3(){
         //given
         Store store = new Store();
         Member member = new Member();
@@ -101,7 +101,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 수정 - 본인의 가게가 아닐 시 예외처리")
-    void test3(){
+    void updateTest1(){
         //given
         Store store = new Store();
         Member member = new Member();
@@ -121,7 +121,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 수정 - 삭제된 메뉴 수정 요청 시 예외처리")
-    void test4(){
+    void updateTest2(){
         //given
         Store store = new Store();
         Member member = new Member();
@@ -148,7 +148,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 수정 - 존재하지 않는 가게일 시 예외처리")
-    void test5(){
+    void updateTest3(){
         //given
         UpdateMenuRequestDto updateMenuRequestDto = new UpdateMenuRequestDto();
 
@@ -161,7 +161,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 수정 - 가게에 존재하지 않는 메뉴 수정 요청 시 예외처리")
-    void test6(){
+    void updateTest4(){
         //given
         UpdateMenuRequestDto updateMenuRequestDto = new UpdateMenuRequestDto();
         Store store = new Store();
@@ -181,7 +181,7 @@ class MenuServiceTest {
 
     @Test
     @DisplayName("메뉴 수정 - 수정 성공")
-    void test7(){
+    void updateTest5(){
         //given
         UpdateMenuRequestDto updateMenuRequestDto = new UpdateMenuRequestDto();
         Store store = new Store();
@@ -210,5 +210,104 @@ class MenuServiceTest {
         assertEquals(menuResponseDto.getMenuName(),"update");
         assertEquals(menuResponseDto.getPrice(),20000);
         assertEquals(menuResponseDto.getContent(),"upupd");
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제 - 본인의 가게가 아닐 시 예외처리")
+    void deleteTest1(){
+        //given
+        Store store = new Store();
+        Member member = new Member();
+        ReflectionTestUtils.setField(store, "id", 2L);
+        ReflectionTestUtils.setField(store, "member", member);
+        ReflectionTestUtils.setField(member, "id", 2L);
+
+        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+
+        //when
+        InvalidRequestException ex = assertThrows(InvalidRequestException.class, ()-> menuService.deleteMenu(1L,1L, 1L));
+        //then
+        assertEquals(ex.getMessage(),"본인 가게가 아닙니다.");
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제 - 존재하지 않는 가게 일 경우 예외처리")
+    void deleteTest2(){
+        //given
+        when(storeRepository.findById(1L)).thenReturn(Optional.empty());
+
+        //when
+        InvalidRequestException ex = assertThrows(InvalidRequestException.class, ()-> menuService.deleteMenu(1L,1L, 1L));
+        //then
+        assertEquals(ex.getMessage(),"존재하지 않는 가게입니다.");
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제 - 가게에 존재하지 않는 메뉴일 경우 예외처리")
+    void deleteTest3(){
+        //given
+        Store store = new Store();
+        Member member = new Member();
+        ReflectionTestUtils.setField(store, "id", 1L);
+        ReflectionTestUtils.setField(store, "member", member);
+        ReflectionTestUtils.setField(member, "id", 1L);
+        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(menuRepository.findByIdAndStoreId(1L,1L)).thenReturn(Optional.empty());
+
+        //when
+        InvalidRequestException ex = assertThrows(InvalidRequestException.class, ()-> menuService.deleteMenu(1L,1L, 1L));
+        //then
+        assertEquals(ex.getMessage(),"가게에 존재하지 않는 메뉴입니다.");
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제 - 이미 삭제된 메뉴일 경우 예외처리")
+    void deleteTest4(){
+        //given
+        Store store = new Store();
+        Member member = new Member();
+        Menu menu = Menu.builder()
+            .menuName("createMenuRequest")
+            .price(1234)
+            .content("createMe")
+            .status(Status.DELETE)
+            .store(store)
+            .build();
+        ReflectionTestUtils.setField(store, "id", 1L);
+        ReflectionTestUtils.setField(store, "member", member);
+        ReflectionTestUtils.setField(member, "id", 1L);
+        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(menuRepository.findByIdAndStoreId(1L,1L)).thenReturn(Optional.of(menu));
+
+        //when
+        InvalidRequestException ex = assertThrows(InvalidRequestException.class, ()-> menuService.deleteMenu(1L,1L, 1L));
+        //then
+        assertEquals(ex.getMessage(),"이미 삭제된 메뉴입니다.");
+    }
+
+    @Test
+    @DisplayName("메뉴 삭제 - 삭제 성공")
+    void deleteTest5(){
+        //given
+        Store store = new Store();
+        Member member = new Member();
+        Menu menu = Menu.builder()
+            .menuName("createMenuRequest")
+            .price(1234)
+            .content("createMe")
+            .status(Status.ACTIVE)
+            .store(store)
+            .build();
+        ReflectionTestUtils.setField(store, "id", 1L);
+        ReflectionTestUtils.setField(store, "member", member);
+        ReflectionTestUtils.setField(member, "id", 1L);
+        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(menuRepository.findByIdAndStoreId(1L,1L)).thenReturn(Optional.of(menu));
+
+        //when
+        String menuName =menuService.deleteMenu(1L,1L, 1L);
+
+        //then
+        assertEquals(menuName,"createMenuRequest");
     }
 }
