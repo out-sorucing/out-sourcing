@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.common.config;
 
+import com.sparta.outsorucing.common.enums.Status;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -35,7 +36,7 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(Long memberId, String nickName, String email, MemberRole memberRole) {
+    public String createToken(Long memberId, String nickName, String email, MemberRole memberRole, Status status) {
         Date date = new Date();
 
         return BEARER_PREFIX +
@@ -44,6 +45,7 @@ public class JwtUtil {
                         .claim("nickName", nickName)
                         .claim("email", email)
                         .claim("memberRole", memberRole)
+                        .claim("status", status)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)

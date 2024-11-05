@@ -2,7 +2,8 @@ package com.sparta.outsorucing.common.enums;
 
 public enum Status {
     DELETE("DELETE"),
-    ACTIVE("ACTIVE");
+    ACTIVE("ACTIVE"),
+    VIP("VIP");
 
     private String status;
 

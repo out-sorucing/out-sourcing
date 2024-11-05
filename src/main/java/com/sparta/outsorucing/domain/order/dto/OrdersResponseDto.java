@@ -28,4 +28,13 @@ public class OrdersResponseDto {
         this.createdAt = order.getCreatedAt();
     }
 
+    public static OrdersResponseDto of(Order order) {
+        return OrdersResponseDto.builder()
+            .price(order.getMenu().getPrice())
+            .status(order.getStatus())
+            .menuName(order.getMenu().getMenuName())
+            .storeName(order.getStore().getStoreName())
+            .createdAt(order.getCreatedAt())
+            .build();
+    }
 }

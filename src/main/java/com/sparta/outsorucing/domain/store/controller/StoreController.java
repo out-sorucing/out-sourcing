@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,12 +46,18 @@ public class StoreController {
     public List<StoreResponseDto> findStoreByName(@RequestParam String keyword, @Auth AuthMember authMember){
         return storeService.findStoreByName(keyword, String.valueOf(authMember.getMemberRole()));
     }
+  
+    // 메뉴 검색
+    @GetMapping("/menus/search")
+    public ResponseEntity<List<StoreResponseDto>> findByMenuName(@RequestParam String keyword) {
+        return ResponseEntity.ok(storeService.findByMenuName(keyword));
+    }
 
     @GetMapping("/{storeId}")
     public List<StoreOneResponseDto> findOneStore(@PathVariable Long storeId) {
         return storeService.findOneStore(storeId);
     }
-
+  
     @PutMapping("/{storeId}")
     public Long updateStore(@PathVariable Long storeId, @RequestBody @Valid StoreRequestDto requestDto, @Auth AuthMember authMember) {
         return storeService.updateStore(storeId,requestDto, authMember.getId(), String.valueOf(authMember.getMemberRole()));

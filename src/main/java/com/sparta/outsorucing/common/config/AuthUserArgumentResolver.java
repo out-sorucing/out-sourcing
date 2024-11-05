@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.common.config;
 
+import com.sparta.outsorucing.common.enums.Status;
 import jakarta.servlet.http.HttpServletRequest;
 import com.sparta.outsorucing.common.exception.AuthException;
 import com.sparta.outsorucing.common.annotation.Auth;
@@ -40,7 +41,8 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         String nickName = (String) request.getAttribute("nickName");
         String email = (String) request.getAttribute("email");
         MemberRole memberRole = MemberRole.of((String) request.getAttribute("memberRole"));
+        Status status = Status.valueOf((String) request.getAttribute("status"));
 
-        return new AuthMember(memberId, nickName, email, memberRole);
+        return new AuthMember(memberId, nickName, email, memberRole, status);
     }
 }

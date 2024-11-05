@@ -22,4 +22,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query(value=menuQuery, nativeQuery = true)
     List<Store> findOneStoreAndMenu(Long id);
 
+    @Query("select s from Store s left join Menu m on s.id = m.store.id where m.menuName like %:menuName%")
+    List<Store> findAllByMenuName(String menuName);
+
 }
