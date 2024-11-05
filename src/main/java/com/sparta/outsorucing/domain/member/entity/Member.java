@@ -1,7 +1,6 @@
 package com.sparta.outsorucing.domain.member.entity;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import com.sparta.outsorucing.common.config.PasswordEncoder;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.enums.MemberRole;
 import jakarta.persistence.Column;
@@ -46,12 +45,28 @@ public class Member {
     @Column(name = "status")
     private Status status;
 
+    private Long kakaoId;
+
     public void createMember(String nickName, String email, String password, MemberRole memberRole) {
         this.nickName = nickName;
         this.email = email;
         this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
         this.role = memberRole;
         this.status = Status.ACTIVE;
+    }
+
+    public Member(String nickName, String email, String password, MemberRole memberRole, Long kakaoId) {
+        this.nickName = nickName;
+        this.email = email;
+        this.password = password;
+        this.role = memberRole;
+        this.status = Status.ACTIVE;
+        this.kakaoId = kakaoId;
+    }
+
+    public Member kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
     }
 
     public void deleteMember() {
