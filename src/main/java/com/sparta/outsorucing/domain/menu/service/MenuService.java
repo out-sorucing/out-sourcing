@@ -26,6 +26,9 @@ public class MenuService {
         Long memberId) {
         Store store = getStore(storeId);
         validateStoreOwner(memberId, store);
+        if(menuRepository.existsByMenuNameAndStoreId(createMenuRequestDto.getMenuName(), storeId)){
+            throw new InvalidRequestException("이미 가게에 추가되어있는 메뉴입니다.");
+        }
         Menu menu = Menu.builder()
             .menuName(createMenuRequestDto.getMenuName())
             .price(createMenuRequestDto.getPrice())
@@ -43,6 +46,9 @@ public class MenuService {
         UpdateMenuRequestDto updateMenuRequestDto,
         Long memberId) {
         validateStoreOwner(memberId, getStore(storeId));
+        if(menuRepository.existsByMenuNameAndStoreId(updateMenuRequestDto.getMenuName(),storeId)){
+            throw new InvalidRequestException("이미 가게에 추가되어있는 메뉴명과 같은 이름으로 수정할 수 없습니다.");
+        }
         Menu menu = getMenu(menuId, storeId);
         if (menu.checkedStatus()) {
             throw new InvalidRequestException("삭제된 메뉴입니다.");
