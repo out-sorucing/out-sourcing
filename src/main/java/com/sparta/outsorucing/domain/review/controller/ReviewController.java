@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -22,6 +24,14 @@ public class ReviewController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(reviewService.createReview(authMember.getId(), orderId, reviewRequestDto));
+    }
+
+    @GetMapping("/stores/{storeId}/reviews")
+    public ResponseEntity<List<ReviewResponseDto>> findReviewsByCreatedAt(@PathVariable Long storeId) {
+        List<ReviewResponseDto> reviews = reviewService.findReviewsByCreatedAt(storeId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(reviews);
     }
 
 }
