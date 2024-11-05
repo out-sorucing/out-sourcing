@@ -16,5 +16,6 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
     @Query("select m from Menu m where m.store.id = :storeId and m.status = 'ACTIVE'")
     List<Menu> findByStoreIdAndStatus(Long storeId);
 
-    boolean existsByMenuNameAndStoreId(String menuName, Long storeId);
+    @Query("select m from Menu m where replace(m.menuName,' ','') = replace(:menuName,' ','') and m.store.id = :storeId")
+    Optional<Menu> findByMenuNameAndStoreId(String menuName, Long storeId);
 }
