@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    List<Store> findAllByStatus(Status status);
+
     //  가게 검색
     List<Store> findAllByStoreNameContainsOrderByIdDesc(String storeName);
 
@@ -18,7 +20,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     int countByMemberIdAndStatus(Long memberId, Status status);
 
     // 가게 단건조회
-    Store findAllById(Long id);
+    Store findByIdAndStatus(Long id, Status status);
 
     @Query("select s from Store s left join Menu m on s.id = m.store.id where m.menuName like %:menuName%")
     List<Store> findAllByMenuName(String menuName);

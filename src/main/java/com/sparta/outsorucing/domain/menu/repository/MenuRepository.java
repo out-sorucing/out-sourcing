@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.menu.repository;
 
+import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.domain.menu.dto.MenuResponseDto;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
 import java.util.List;
@@ -15,7 +16,7 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
         Long storeId);
 
     // 가게단건에서 메뉴 목록조회
-    List<Menu> findByStoreId(Long storeId);
+    List<Menu> findByStoreIdAndStatus(Long storeId, Status status);
 
     @Query("select m from Menu m where m.store.id = :storeId and m.status = 'ACTIVE'")
     List<MenuResponseDto> findByStoreIdAndStatus(Long storeId);
