@@ -5,14 +5,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.servlet.Filter;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -26,13 +29,15 @@ public class JwtFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+        throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
         String url = httpRequest.getRequestURI();
 
-        if (url.startsWith("/api/auth")||url.matches("^/api/stores/\\d+/reviews.*$")||url.equals("/")) {
+        if (url.startsWith("/api/auth") || url.matches("^/api/stores/\\d+/reviews.*$")
+            || url.equals("/") || url.startsWith("/images")) {
             chain.doFilter(request, response);
             return;
         }

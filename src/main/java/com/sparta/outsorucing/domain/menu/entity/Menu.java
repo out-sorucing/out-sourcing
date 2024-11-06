@@ -17,14 +17,15 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="menu")
-@NoArgsConstructor(access= AccessLevel.PROTECTED)
+@Table(name = "menu")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Menu {
 
     @Id
@@ -36,6 +37,7 @@ public class Menu {
     @Comment(value = "메뉴명")
     private String menuName;
 
+    @Setter
     @Column(nullable = false)
     private int price;
 
@@ -73,7 +75,8 @@ public class Menu {
         this.status = Status.DELETE;
     }
 
-    public boolean checkedStatus(){
+    public boolean checkedStatus() {
         return this.status == Status.DELETE;
     }
+
 }
