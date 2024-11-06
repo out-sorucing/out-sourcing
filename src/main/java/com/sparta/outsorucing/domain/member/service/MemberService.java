@@ -30,18 +30,16 @@ public class MemberService {
             throw new InvalidRequestException("이미 존재하는 이메일입니다");
         }
 
-        MemberRole memberRole = MemberRole.of(signupRequestDto.getMemberRole());
+        Member member = Member.builder()
+                .nickName(signupRequestDto.getNickName())
+                .email(signupRequestDto.getEmail())
+                .password(signupRequestDto.getPassword())
+                .memberRole(MemberRole.of(signupRequestDto.getMemberRole()))
+                .build();
 
-        Member member = new Member();
-        member.createMember(
-                signupRequestDto.getNickName(),
-                signupRequestDto.getEmail(),
-                signupRequestDto.getPassword(),
-                memberRole
-        );
         memberRepository.save(member);
 
-        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), memberRole, member.getStatus());
+        return new MemberResponseDto(member.getId(), member.getNickName(), member.getEmail(), MemberRole.of(signupRequestDto.getMemberRole()), member.getStatus());
     }
 
     public MemberResponseDto login(LoginRequestDto loginRequestDto) {

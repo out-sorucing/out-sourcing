@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -49,7 +50,8 @@ public class Member {
 
     private Long kakaoId;
 
-    public void createMember(String nickName, String email, String password, MemberRole memberRole) {
+    @Builder
+    public Member(String nickName, String email, String password, MemberRole memberRole) {
         this.nickName = nickName;
         this.email = email;
         this.password = BCrypt.withDefaults().hashToString(BCrypt.MIN_COST, password.toCharArray());
