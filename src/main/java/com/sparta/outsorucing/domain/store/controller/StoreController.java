@@ -67,7 +67,7 @@ public class StoreController {
 
     // [즐겨찾기]
     // 생성
-    @GetMapping("/favorites/{storeId}")
+    @PostMapping("/favorites/{storeId}")
     public Favorites createFavorites(@PathVariable Long storeId, @Auth AuthMember authMember) {
         return storeService.createFavorites(storeId, authMember.getId(), String.valueOf(authMember.getMemberRole()));
     }
