@@ -41,10 +41,4 @@ public class ImageUtil {
         }
         return IMAGE_URI_PREFIX + bucket + "/" + uuid;
     }
-
-    public void deleteImage(String imageUri) {
-        String uuid = UUID.randomUUID().toString();
-        BlobInfo blobInfo = BlobInfo.newBuilder(bucket,uuid).build();
-        storage.delete(bucket, uuid);
-    }
 }
