@@ -62,9 +62,6 @@ public class MenuService {
         }
         String imageUri = imageUtil.uploadImage(file);
         if(imageUri != null) {
-            if(menu.getImageUri() != null){
-                imageUtil.deleteImage(menu.getImageUri());
-            }
             menu.uploadImage(imageUri);
         }
         menu.updateMenu(updateMenuRequestDto.getMenuName(), updateMenuRequestDto.getPrice(), updateMenuRequestDto.getContent());
