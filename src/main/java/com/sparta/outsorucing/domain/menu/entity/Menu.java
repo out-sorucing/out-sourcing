@@ -44,6 +44,9 @@ public class Menu {
     @Column(nullable = false)
     private String content;
 
+    @Column
+    private String imageUri;
+
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
@@ -69,6 +72,10 @@ public class Menu {
         this.menuName = menuName;
         this.price = price;
         this.content = content;
+    }
+
+    public void uploadImage(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     public void updateStatus() {

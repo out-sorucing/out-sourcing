@@ -1,5 +1,6 @@
 package com.sparta.outsorucing.domain.menu.service;
 
+import com.sparta.outsorucing.common.config.ImageUtil;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.menu.dto.CreateMenuRequestDto;
@@ -12,6 +13,7 @@ import com.sparta.outsorucing.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Service
@@ -19,16 +21,19 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
+    private final ImageUtil imageUtil;
 
     public MenuResponseDto createMenu(
         Long storeId,
         CreateMenuRequestDto createMenuRequestDto,
+        MultipartFile file,
         Long memberId) {
         Store store = getStore(storeId);
         validateStoreOwner(memberId, store);
         menuRepository.findByMenuNameAndStoreId(createMenuRequestDto.getMenuName(), storeId).ifPresent(po->{
             throw new InvalidRequestException("이미 가게에 추가되어있는 메뉴입니다.");
         });
+        String imageUri = imageUtil.uploadImage(file);
         Menu menu = Menu.builder()
             .menuName(createMenuRequestDto.getMenuName())
             .price(createMenuRequestDto.getPrice())
@@ -36,6 +41,7 @@ public class MenuService {
             .status(Status.ACTIVE)
             .store(store)
             .build();
+        menu.uploadImage(imageUri);
         return new MenuResponseDto(menuRepository.save(menu));
     }
 
@@ -44,6 +50,7 @@ public class MenuService {
         Long storeId,
         Long menuId,
         UpdateMenuRequestDto updateMenuRequestDto,
+        MultipartFile file,
         Long memberId) {
         validateStoreOwner(memberId, getStore(storeId));
         menuRepository.findByMenuNameAndStoreId(updateMenuRequestDto.getMenuName(), storeId).ifPresent(po->{
@@ -52,6 +59,13 @@ public class MenuService {
         Menu menu = getMenu(menuId, storeId);
         if (menu.checkedStatus()) {
             throw new InvalidRequestException("삭제된 메뉴입니다.");
+        }
+        String imageUri = imageUtil.uploadImage(file);
+        if(imageUri != null) {
+            if(menu.getImageUri() != null){
+                imageUtil.deleteImage(menu.getImageUri());
+            }
+            menu.uploadImage(imageUri);
         }
         menu.updateMenu(updateMenuRequestDto.getMenuName(), updateMenuRequestDto.getPrice(), updateMenuRequestDto.getContent());
         return new MenuResponseDto(menu);
@@ -72,7 +86,7 @@ public class MenuService {
     }
 
     private Store getStore(Long storeId) {
-       return storeRepository.findById(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
+       return storeRepository.findByIdAndStatus(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
     }
 
     private Menu getMenu(Long menuId, Long storeId){
