@@ -66,10 +66,6 @@ public class StoreService {
         return new StoreOneResponseDto(store,menuResponseDto);
     }
 
-    public List<StoreResponseDto> findByMenuName(String keyword) {
-        return storeRepository.findAllByMenuName(keyword).stream().map(StoreResponseDto::new).toList();
-    }
-
     @Transactional
     public Long updateStore(Long storeId, StoreRequestDto requestDto, Long memberId, String memberRole) {
         if(memberRole.equals("USER")) {
