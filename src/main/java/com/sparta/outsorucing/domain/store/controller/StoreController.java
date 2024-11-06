@@ -48,12 +48,6 @@ public class StoreController {
     public List<StoreResponseDto> findStoreByName(@RequestParam String keyword, @Auth AuthMember authMember){
         return storeService.findStoreByName(keyword, String.valueOf(authMember.getMemberRole()));
     }
-  
-    // 메뉴 검색
-    @GetMapping("/menus/search")
-    public ResponseEntity<List<StoreResponseDto>> findByMenuName(@RequestParam String keyword) {
-        return ResponseEntity.ok(storeService.findByMenuName(keyword));
-    }
 
     @GetMapping("/{storeId}")
     public StoreOneResponseDto findOneStore(@PathVariable Long storeId) {

@@ -14,17 +14,15 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     List<Store> findAllByStatus(Status status);
 
-    //  가게 검색
-    List<Store> findAllByStoreNameContainsOrderByIdDesc(String storeName);
+    //  가게 및 메뉴명 검색
+    @Query("select s from Store s left join Menu m on s.id = m.store.id where m.menuName like %:keyword% or s.storeName like %:keyword% and (s.status = 'ACTIVE' and m.status = 'ACTIVE')")
+    List<Store> findAllByStoreNameContainsOrderByIdDesc(String keyword);
 
     // 가게 3개 개수 체크
     int countByMemberIdAndStatus(Long memberId, Status status);
 
     // 가게 단건조회
     Store findByIdAndStatus(Long id, Status status);
-
-    @Query("select s from Store s left join Menu m on s.id = m.store.id where m.menuName like %:menuName% and s.status = 'ACTIVE' and m.status = 'ACTIVE'")
-    List<Store> findAllByMenuName(String menuName);
 
     @Query("select s from Store s where s.id = :storeId and s.status = 'ACTIVE'")
     Optional<Store> findByIdAndStatus(Long storeId);
