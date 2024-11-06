@@ -3,9 +3,11 @@ package com.sparta.outsorucing.domain.order.service;
 import static com.sparta.outsorucing.common.enums.MemberRole.OWNER;
 import static com.sparta.outsorucing.common.enums.OrderStatus.CANCELED;
 import static com.sparta.outsorucing.common.enums.OrderStatus.ORDERED;
+import static com.sparta.outsorucing.common.enums.Status.DELETE;
 import static com.sparta.outsorucing.common.enums.Status.VIP;
 
 import com.sparta.outsorucing.common.dto.AuthMember;
+import com.sparta.outsorucing.common.exception.InvalidRequestException;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.member.repository.MemberRepository;
 import com.sparta.outsorucing.domain.menu.entity.Menu;
@@ -40,27 +42,29 @@ public class OrderService {
 
         Member member = findMember(authMember);
         Menu menu = menuRepository.findById(menusId)
-            .orElseThrow(() -> new IllegalStateException("Menus not found"));
+            .orElseThrow(() -> new InvalidRequestException("Menus not found"));
         Store store = findStore(menu.getStore().getId());
 
-        // 최소 주문금액
-        if (menu.getPrice() < store.getMinPrice()) {
-            throw new IllegalStateException("최소주문금액이 부족합니다.");
-        }
-        // 오픈/마감시간 비교
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         if (dateFormat.format(new Date()).compareTo(store.getOpenTime()) < 0 ||
             dateFormat.format(new Date()).compareTo(store.getCloseTime()) > 0) {
-            throw new IllegalStateException("오픈시간이 아닙니다.");
+            throw new InvalidRequestException("오픈시간이 아닙니다.");
         }
-        int price = menu.getPrice();
+        if (menu.getStatus().equals(DELETE)) {
+            throw new InvalidRequestException("삭제된 메뉴입니다.");
+        }
+        // 최소 주문금액
+        if (menu.getPrice() < store.getMinPrice()) {
+            throw new InvalidRequestException("최소주문금액이 부족합니다.");
+        }
+
         if (member.getStatus().equals(VIP)) {
-            price = price *= 0.95;
+            menu.setPrice(menu.getPrice() * 95 / 100);
         }
 
         Order order = Order.builder().status(ORDERED)
             .member(member)
-            .price(price)
+            .price(menu.getPrice())
             .menu(menu)
             .store(store)
             .build();
@@ -78,7 +82,7 @@ public class OrderService {
     public String requestReOrder(AuthMember authMember, Long ordersId) {
         Order order = findOrder(ordersId);
 
-        return requestOrder(authMember, order.getId());
+        return requestOrder(authMember, order.getMenu().getId());
     }
 
     @Transactional
@@ -86,17 +90,17 @@ public class OrderService {
         ChangeOrderStatusDto changeOrderStatusDto) {
         Order order = findOrder(ordersId);
 
-        if (order.getStatus().equals(changeOrderStatusDto.getOrderStatus())) {
-            throw new IllegalStateException(
-                "이미" + changeOrderStatusDto.getOrderStatus() + "상태 입니다");
-        }
         if (authMember.getId().equals(order.getMember().getId())
             && changeOrderStatusDto.getOrderStatus().equals(CANCELED)) {
             order.update(changeOrderStatusDto.getOrderStatus());
             return changeOrderStatusDto.getOrderStatus() + "로 변경되었습니다";
         }
-        if (authMember.getId().equals(order.getStore().getId())) {
-            throw new IllegalStateException("권한이 없습니다.");
+        if (!authMember.getId().equals(order.getStore().getMember().getId())) {
+            throw new InvalidRequestException("권한이 없습니다.");
+        }
+        if (order.getStatus().equals(changeOrderStatusDto.getOrderStatus())) {
+            throw new InvalidRequestException(
+                "이미" + changeOrderStatusDto.getOrderStatus() + "상태 입니다");
         }
 
         order.update(changeOrderStatusDto.getOrderStatus());
@@ -133,7 +137,7 @@ public class OrderService {
 
         if (!member.getId().equals(order.getMember().getId()) && !member.getId()
             .equals(order.getStore().getMember().getId())) {
-            throw new IllegalStateException("내 주문이 아닙니다.");
+            throw new InvalidRequestException("내 주문이 아닙니다.");
         }
 
         return OrdersResponseDto.of(order);
@@ -141,17 +145,17 @@ public class OrderService {
 
     private Member findMember(AuthMember authMember) {
         return memberRepository.findById(authMember.getId())
-            .orElseThrow(() -> new IllegalStateException("user not found"));
+            .orElseThrow(() -> new InvalidRequestException("user not found"));
     }
 
     private Store findStore(Long storesId) {
         return storeRepository.findById(storesId)
-            .orElseThrow(() -> new IllegalStateException("store not found"));
+            .orElseThrow(() -> new InvalidRequestException("store not found"));
     }
 
     private Order findOrder(Long ordersId) {
         return orderRepository.findById(ordersId)
-            .orElseThrow(() -> new IllegalStateException("order not found"));
+            .orElseThrow(() -> new InvalidRequestException("order not found"));
     }
 
 
