@@ -86,6 +86,10 @@ public class OrderService {
         ChangeOrderStatusDto changeOrderStatusDto) {
         Order order = findOrder(ordersId);
 
+        if (order.getStatus().equals(changeOrderStatusDto.getOrderStatus())) {
+            throw new IllegalStateException(
+                "이미" + changeOrderStatusDto.getOrderStatus() + "상태 입니다");
+        }
         if (authMember.getId().equals(order.getMember().getId())
             && changeOrderStatusDto.getOrderStatus().equals(CANCELED)) {
             order.update(changeOrderStatusDto.getOrderStatus());
@@ -95,15 +99,10 @@ public class OrderService {
             throw new IllegalStateException("권한이 없습니다.");
         }
 
-        if (order.getStatus().equals(changeOrderStatusDto.getOrderStatus())) {
-            throw new IllegalStateException(
-                "이미" + changeOrderStatusDto.getOrderStatus() + "상태 입니다");
-        }
         order.update(changeOrderStatusDto.getOrderStatus());
 
         return changeOrderStatusDto.getOrderStatus() + "로 변경되었습니다";
     }
-
 
     public Page<OrdersResponseDto> retrieveOrders(AuthMember authMember, int page, int size) {
         Member member = findMember(authMember);
