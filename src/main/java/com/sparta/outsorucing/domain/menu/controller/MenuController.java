@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,10 +30,12 @@ public class MenuController {
     @PostMapping("/{storeId}/menus")
     public ResponseEntity<MenuResponseDto> createMenu(
         @PathVariable Long storeId,
-        @Valid @RequestBody CreateMenuRequestDto createMenuRequestDto,
+        @Valid @RequestPart CreateMenuRequestDto createMenuRequestDto,
+        @RequestPart(required = false) MultipartFile file,
         @Auth AuthMember authMember) {
         return ResponseEntity.status(HttpStatus.CREATED).body(menuService.createMenu(storeId,
                                                                createMenuRequestDto,
+                                                               file,
                                                                authMember.getId()));
     }
 
@@ -39,11 +43,13 @@ public class MenuController {
     public ResponseEntity<MenuResponseDto> updateMenu(
         @PathVariable("storeId") Long storeId,
         @PathVariable("menuId") Long menuId,
-        @Valid @RequestBody UpdateMenuRequestDto updateMenuRequestDto,
+        @Valid @RequestPart UpdateMenuRequestDto updateMenuRequestDto,
+        @RequestPart(required = false) MultipartFile file,
         @Auth AuthMember authMember) {
         return ResponseEntity.status(HttpStatus.OK).body(menuService.UpdateMenu(storeId,
                                                                menuId,
                                                                updateMenuRequestDto,
+                                                               file,
                                                                authMember.getId()));
     }
 

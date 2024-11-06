@@ -9,11 +9,13 @@ public class MenuResponseDto {
     private final String menuName;
     private final int price;
     private final String content;
+    private final String imageUri;
 
     public MenuResponseDto(Menu menu) {
         this.id = menu.getId();
         this.menuName = menu.getMenuName();
         this.price = menu.getPrice();
         this.content = menu.getContent();
+        this.imageUri = menu.getImageUri();
     }
 }
