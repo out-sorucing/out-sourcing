@@ -10,7 +10,6 @@ import com.sparta.outsorucing.domain.menu.entity.Menu;
 import com.sparta.outsorucing.domain.menu.repository.MenuRepository;
 import com.sparta.outsorucing.domain.store.entity.Store;
 import com.sparta.outsorucing.domain.store.repository.StoreRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,7 +86,7 @@ public class MenuService {
     }
 
     private Store getStore(Long storeId) {
-       return storeRepository.findById(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
+       return storeRepository.findByIdAndStatus(storeId).orElseThrow(() -> new InvalidRequestException("존재하지 않는 가게입니다."));
     }
 
     private Menu getMenu(Long menuId, Long storeId){
