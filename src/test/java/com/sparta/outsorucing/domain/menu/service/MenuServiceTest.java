@@ -73,7 +73,7 @@ class MenuServiceTest {
                                      "imageUri",
                                      "spring.png");
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.save(any())).thenReturn(menu);
 
         //when
@@ -140,7 +140,7 @@ class MenuServiceTest {
                                      "id",
                                      2L);
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
 
         //when
         InvalidRequestException ex = assertThrows(InvalidRequestException.class,
@@ -179,7 +179,7 @@ class MenuServiceTest {
                                      "id",
                                      2L);
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
 
         //when
         InvalidRequestException ex = assertThrows(InvalidRequestException.class,
@@ -217,7 +217,7 @@ class MenuServiceTest {
                                      "id",
                                      1L);
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(any(),
                                                any())).thenReturn(Optional.of(menu));
 
@@ -280,7 +280,7 @@ class MenuServiceTest {
                                      "id",
                                      1L);
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(1L,
                                                1L)).thenReturn(Optional.empty());
 
@@ -332,7 +332,7 @@ class MenuServiceTest {
                                      "content",
                                      "upupd");
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(1L,
                                                1L)).thenReturn(Optional.of(menu));
 
@@ -367,7 +367,7 @@ class MenuServiceTest {
                                      "id",
                                      2L);
 
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
 
         //when
         InvalidRequestException ex = assertThrows(InvalidRequestException.class,
@@ -383,7 +383,7 @@ class MenuServiceTest {
     @DisplayName("메뉴 삭제 - 존재하지 않는 가게 일 경우 예외처리")
     void deleteTest2() {
         //given
-        when(storeRepository.findById(1L)).thenReturn(Optional.empty());
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.empty());
 
         //when
         InvalidRequestException ex = assertThrows(InvalidRequestException.class,
@@ -410,7 +410,7 @@ class MenuServiceTest {
         ReflectionTestUtils.setField(member,
                                      "id",
                                      1L);
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(1L,
                                                1L)).thenReturn(Optional.empty());
 
@@ -440,7 +440,7 @@ class MenuServiceTest {
         ReflectionTestUtils.setField(member,
                                      "id",
                                      1L);
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(1L,
                                                1L)).thenReturn(Optional.of(menu));
 
@@ -470,7 +470,7 @@ class MenuServiceTest {
         ReflectionTestUtils.setField(member,
                                      "id",
                                      1L);
-        when(storeRepository.findById(1L)).thenReturn(Optional.of(store));
+        when(storeRepository.findByIdAndStatus(1L)).thenReturn(Optional.of(store));
         when(menuRepository.findByIdAndStoreId(1L,
                                                1L)).thenReturn(Optional.of(menu));
 
