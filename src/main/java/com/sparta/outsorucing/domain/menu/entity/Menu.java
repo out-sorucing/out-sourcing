@@ -47,6 +47,7 @@ public class Menu {
     @Column
     private String imageUri;
 
+    @Setter
     @Column(name = "status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private Status status;
@@ -85,5 +86,9 @@ public class Menu {
     public boolean checkedStatus() {
         return this.status == Status.DELETE;
     }
+
+    public void setId(long l) {
+    }
+
 
 }
