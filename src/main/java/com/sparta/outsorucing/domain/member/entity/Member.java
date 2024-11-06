@@ -11,15 +11,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
 @Table(name = "member")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Member {
 
     @Id
@@ -43,6 +46,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private MemberRole role;
 
+    @Setter
     @Column(name = "status")
     @Enumerated(value = EnumType.STRING)
     private Status status;
@@ -59,7 +63,8 @@ public class Member {
         this.status = Status.ACTIVE;
     }
 
-    public Member(String nickName, String email, String password, MemberRole memberRole, Long kakaoId) {
+    public Member(String nickName, String email, String password, MemberRole memberRole,
+        Long kakaoId) {
         this.nickName = nickName;
         this.email = email;
         this.password = password;
@@ -80,4 +85,6 @@ public class Member {
     public void update(Status status) {
         this.status = status;
     }
+
+
 }

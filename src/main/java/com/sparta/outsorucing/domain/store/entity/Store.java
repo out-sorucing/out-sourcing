@@ -1,6 +1,5 @@
 package com.sparta.outsorucing.domain.store.entity;
 
-import com.sparta.outsorucing.common.dto.AuthMember;
 import com.sparta.outsorucing.common.enums.Status;
 import com.sparta.outsorucing.domain.member.entity.Member;
 import com.sparta.outsorucing.domain.store.dto.StoreRequestDto;
@@ -15,16 +14,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.util.Optional;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
-@Table(name="store")
+@Table(name = "store")
 @NoArgsConstructor
 public class Store {
 
@@ -37,9 +36,11 @@ public class Store {
     @Comment(value = "가게명")
     private String storeName;
 
+    @Setter
     @Column
     private String openTime;
 
+    @Setter
     @Column
     private String closeTime;
 
@@ -64,14 +65,26 @@ public class Store {
         this.member = member;
     }
 
-    public void update(StoreRequestDto requestDto){
+    public Store(long l, String sampleStore, String time, String time1, int i, Status status,
+        Member member) {
+        this.id = l;
+        this.storeName = sampleStore;
+        this.openTime = time;
+        this.closeTime = time1;
+        this.minPrice = i;
+        this.status = status;
+        this.member = member;
+    }
+
+    public void update(StoreRequestDto requestDto) {
         this.storeName = requestDto.getStoreName();
         this.openTime = requestDto.getOpenTime();
         this.closeTime = requestDto.getCloseTime();
     }
 
-    public void storeClose(Status status){
+    public void storeClose(Status status) {
         this.status = status;
     }
+
 
 }
