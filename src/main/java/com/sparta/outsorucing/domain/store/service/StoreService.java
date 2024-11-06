@@ -61,6 +61,11 @@ public class StoreService {
 
     // 가게 단건 조회
     public StoreOneResponseDto findOneStore(Long storeId){
+        int checkStore = storeRepository.countByIdAndStatus(storeId,Status.DELETE);
+        if(checkStore > 0){
+            throw new InvalidRequestException("폐업된 가게는 조회할 수 없습니다.");
+        }
+
         Store store = storeRepository.findByIdAndStatus(storeId,Status.ACTIVE);
         List<MenuResponseDto> menuResponseDto = menuRepository.findByStoreIdAndStatus(storeId,Status.ACTIVE).stream().map(MenuResponseDto::new).toList();
         return new StoreOneResponseDto(store,menuResponseDto);
@@ -130,6 +135,12 @@ public class StoreService {
         if(memberRole.equals("OWNER")) {
             throw new InvalidRequestException("일반회원들만 즐겨찾기를 삭제할 수 있습니다.");
         }
+
+        int checkFavorites = favoritesRepository.countByMemberIdAndId(memberId, id);
+        if(checkFavorites == 0){
+            throw new InvalidRequestException("본인의 즐겨찾기만 삭제할 수 있습니다.");
+        }
+
         Favorites favorites = findFavorites(id);
         favoritesRepository.delete(favorites);
         return id;

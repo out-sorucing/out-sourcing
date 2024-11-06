@@ -21,6 +21,9 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     // 가게 3개 개수 체크
     int countByMemberIdAndStatus(Long memberId, Status status);
 
+    // 단건조회 폐업체크
+    int countByIdAndStatus(Long id, Status status);
+
     // 가게 단건조회
     Store findByIdAndStatus(Long id, Status status);
 
