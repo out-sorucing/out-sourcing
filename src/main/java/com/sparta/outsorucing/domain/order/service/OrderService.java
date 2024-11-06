@@ -57,14 +57,14 @@ public class OrderService {
         if (menu.getPrice() < store.getMinPrice()) {
             throw new InvalidRequestException("최소주문금액이 부족합니다.");
         }
-
+        int price = menu.getPrice();
         if (member.getStatus().equals(VIP)) {
-            menu.setPrice(menu.getPrice() * 95 / 100);
+            price *= 0.95;
         }
 
         Order order = Order.builder().status(ORDERED)
             .member(member)
-            .price(menu.getPrice())
+            .price(price)
             .menu(menu)
             .store(store)
             .build();
@@ -81,6 +81,10 @@ public class OrderService {
 
     public String requestReOrder(AuthMember authMember, Long ordersId) {
         Order order = findOrder(ordersId);
+
+        if (!order.getMember().getId().equals(authMember.getId())) {
+            throw new InvalidRequestException("내 주문이 아닙니다.");
+        }
 
         return requestOrder(authMember, order.getMenu().getId());
     }
