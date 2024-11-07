@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -35,6 +34,12 @@ public class StoreController {
     public ResponseEntity<StoreResponseDto> createStore(@RequestBody @Valid StoreRequestDto requestDto, @Auth AuthMember authMember) {
         StoreResponseDto store = storeService.createStore(requestDto, authMember.getId(), String.valueOf(authMember.getMemberRole()));
         return ResponseEntity.status(HttpStatus.OK).body(store);
+    }
+
+    // 가게목록 조회(사장님 화면)
+    @GetMapping("/owners")
+    public List<StoreResponseDto> findStoreOwner(@Auth AuthMember authMember){
+        return storeService.findStoreOwner(authMember.getId(), String.valueOf(authMember.getMemberRole()));
     }
 
     // 전체 가게목록 조회(소비자 입장 화면)

@@ -12,6 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
 
+    // 사장님 가게 조회
+    List<Store> findAllByMemberIdAndStatus(Long memberId, Status status);
+
+    // 일반회원 가게 조회
     List<Store> findAllByStatus(Status status);
 
     //  가게 및 메뉴명 검색

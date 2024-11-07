@@ -42,11 +42,20 @@ public class StoreService {
         return new StoreResponseDto(savedStore);
     }
 
+    // 가게목록 조회(사장님 화면)
+    public List<StoreResponseDto> findStoreOwner(Long memberId, String memberRole){
+        findMemberId(memberId);
+        if(memberRole.equals("USER")) {
+            throw new InvalidRequestException("사장님이 생성한 가게 목록을 조회하는 페이지입니다.");
+        }
+        return storeRepository.findAllByMemberIdAndStatus(memberId,Status.ACTIVE).stream().map(StoreResponseDto::new).toList();
+    }
+
     // 전체 가게목록 조회(소비자 입장 화면)
     public List<StoreResponseDto> findStore(Long memberId, String memberRole){
         findMemberId(memberId);
         if(memberRole.equals("OWNER")) {
-            throw new InvalidRequestException("일반회원들만 전체 가게를 조회할 수 있습니다.");
+            throw new InvalidRequestException("일반회원이 전체 가게를 조회하는 페이지입니다.");
         }
         return storeRepository.findAllByStatus(Status.ACTIVE).stream().map(StoreResponseDto::new).toList();
     }
