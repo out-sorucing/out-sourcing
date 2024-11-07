@@ -65,17 +65,6 @@ public class Store {
         this.member = member;
     }
 
-    public Store(long l, String sampleStore, String time, String time1, int i, Status status,
-        Member member) {
-        this.id = l;
-        this.storeName = sampleStore;
-        this.openTime = time;
-        this.closeTime = time1;
-        this.minPrice = i;
-        this.status = status;
-        this.member = member;
-    }
-
     public void update(StoreRequestDto requestDto) {
         this.storeName = requestDto.getStoreName();
         this.openTime = requestDto.getOpenTime();
@@ -86,6 +75,5 @@ public class Store {
     public void storeClose(Status status) {
         this.status = status;
     }
-
 
 }
