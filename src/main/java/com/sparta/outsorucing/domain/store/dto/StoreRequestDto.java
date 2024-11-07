@@ -1,8 +1,9 @@
 package com.sparta.outsorucing.domain.store.dto;
 
 
+import com.sparta.outsorucing.common.enums.Status;
 import jakarta.validation.constraints.NotBlank;
-import java.sql.Time;
+import javax.print.DocFlavor.STRING;
 import lombok.Getter;
 
 @Getter
@@ -16,4 +17,14 @@ public class StoreRequestDto {
     private String openTime;
     private String closeTime;
     private int minPrice;
+
+    // 테스트용 request 생성자
+    public StoreRequestDto(String storeName, String status, String openTime, String closeTime, int minPrice, Long memberId) {
+        this.storeName = storeName;
+        this.status = status;
+        this.openTime = openTime;
+        this.closeTime = closeTime;
+        this.minPrice = minPrice;
+        this.memberId = memberId;
+    }
 }

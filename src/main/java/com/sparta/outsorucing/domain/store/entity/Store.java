@@ -80,6 +80,7 @@ public class Store {
         this.storeName = requestDto.getStoreName();
         this.openTime = requestDto.getOpenTime();
         this.closeTime = requestDto.getCloseTime();
+        this.minPrice = requestDto.getMinPrice();
     }
 
     public void storeClose(Status status) {
